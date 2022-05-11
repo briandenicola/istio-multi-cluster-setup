@@ -123,7 +123,7 @@ jobs:
     - name: Setup Central Pod Identity - Service Mesh
       working-directory: './scripts'
       run: |
-        export SUBSCRIPTION_ID=${{ env.CENTRAL_SUBSCRIPTION_ID }}
+        export SUBSCRIPTION_ID=${{ secrets.CENTRAL_SUBSCRIPTION_ID }}
         export CLUSTER_NAME=${{ env.CE_CLUSTER_NAME }}
         export CLUSTER_RG=${{ env.CE_CLUSTER_RG }}
         export IDENTITY_NAME=${{ env.CE_CLUSTER_NAME }}-istio-pod-identity
@@ -131,6 +131,13 @@ jobs:
         export NAMESPACE="default"
         
         bash ./aks-pod-identity-creation.sh
+
+    - name: Setup Istio Trusted CA Store
+      working-directory: './scripts'
+      run: |
+        export CENTRAL_SUBSCRIPTION_ID=${{ secrets.CENTRAL_SUBSCRIPTION_ID }}
+        export SOUTHCENTRAL_SUBSCRIPTION_ID=${{ secrets.SOUTHCENTRAL_SUBSCRIPTION_ID }}
+        bash ./istio-create-trusted-ca.sh
 
     - name: Setup Flux - South Central
       working-directory: './scripts'
@@ -144,8 +151,15 @@ jobs:
     - name: Setup Flux - Central
       working-directory: './scripts'
       run: |
-        export SUBSCRIPTION_ID=${{ env.CENTRAL_SUBSCRIPTION_ID }}
+        export SUBSCRIPTION_ID=${{ secrets.CENTRAL_SUBSCRIPTION_ID }}
         export CLUSTER_NAME=${{ env.CE_CLUSTER_NAME }}
         export CLUSTER_RG=${{ env.CE_CLUSTER_RG }}
         export CLUSTER_BOOTSTRAP_PATH=./cluster-manifests/istio-central
         bash ./aks-flux-configuration.sh
+
+    - name: Setup Flux - Central
+      working-directory: './scripts'
+      run: |
+        export CENTRAL_SUBSCRIPTION_ID=${{ secrets.CENTRAL_SUBSCRIPTION_ID }}
+        export SOUTHCENTRAL_SUBSCRIPTION_ID=${{ secrets.SOUTHCENTRAL_SUBSCRIPTION_ID }}
+        bash ./istio-create-remote-secrets.sh
