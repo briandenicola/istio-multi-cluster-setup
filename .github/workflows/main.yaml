@@ -1,0 +1,86 @@
+name: Creates K8s with a Mesh installed
+on:
+  workflow_dispatch:
+    inputs:
+      cluster_name:
+        description: 'The name of the cluster to create - e616aq|f1dd32'
+        required: true
+        default: 'e616aq'
+      mesh_type:
+        description: 'Type of service mesh to include in the cluster - istio|osm'
+        required: true
+        default: 'istio'
+      
+jobs:
+  deploy:
+    name: Deploy Cluster
+    runs-on: self-hosted
+    env:
+        ARM_USE_MSI: true 
+        ARM_SUBSCRIPTION_ID: ${{ secrets.ARM_SUBSCRIPTION_ID }}
+        CORE_SUBSCRIPTION_ID: ${{ secrets.CORE_SUBSCRIPTION_ID }}
+        ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+        GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
+        SERVICE_TYPE_MESH:  ${{ github.event.inputs.mesh_type }}
+        CLUSTER_RG:  DevSub02_K8S_${{ github.event.inputs.cluster_name }}_RG
+        CLUSTER_NAME: ${{ github.event.inputs.cluster_name }}
+        GITHUB_ACCOUNT: briandenicola
+        GITHUB_REPO: kubernetes-cluster-setup
+        REPO_BRANCH: master
+
+    defaults:
+      run:
+        working-directory: './infrastructure'
+
+    steps:
+    - name: "Checkout"
+      uses: actions/checkout@master
+
+    - name: Login to Azure
+      run: |
+        az login --identity 
+
+    - name: "Terraform Setup"
+      uses: hashicorp/setup-terraform@v1
+
+    - name: "Terraform Init"
+      id: init
+      run: terraform init -backend=true -backend-config="tenant_id=${{ env.ARM_TENANT_ID }}" -backend-config="subscription_id=${{ env.CORE_SUBSCRIPTION_ID }}" -backend-config="key=${{ env.CLUSTER_NAME }}.terraform.tfstate"
+      
+    - name: "Terraform Plan"
+      id: plan
+      run:  terraform plan -out="${{ env.CLUSTER_NAME }}.plan" -var "cluster_name=${{ env.CLUSTER_NAME }}" -var "resource_group_name=${{ env.CLUSTER_RG }}" -var "certificate_base64_encoded=${{ secrets.CERTIFICATE }}"  -var "certificate_password=${{ secrets.CERT_PASSWORD }}" -var "service_mesh_type=${{ env.SERVICE_TYPE_MESH }}" -var-file="${{ env.SERVICE_TYPE_MESH }}.tfvars"
+      continue-on-error: false 
+
+    - name: "Terraform Apply"
+      id: apply
+      run: terraform apply -auto-approve ${{ env.CLUSTER_NAME }}.plan
+
+    - name: Setup Pod Identity - Service Mesh
+      working-directory: './scripts'
+      run: |
+        export SUBSCRIPTION_ID=${{ env.ARM_SUBSCRIPTION_ID }}
+        export IDENTITY_NAME=${{ env.CLUSTER_NAME }}-${{ env.SERVICE_TYPE_MESH }}-pod-identity
+        export IDENTITY_RG=${{ env.CLUSTER_RG }}
+        export NAMESPACE="default"
+        
+        bash ./aks-pod-identity-creation.sh
+
+#    - name: Setup Default Demo App Identity - Chat
+#      working-directory: './scripts'
+#      run: |
+#        export SUBSCRIPTION_ID=${{ env.ARM_SUBSCRIPTION_ID }}
+#        export IDENTITY_NAME="chat-e0ce7b6-identity"
+#        export IDENTITY_RG="DevSub02_Chat_RG"
+#        export NAMESPACE="default"
+#        
+#        bash ./aks-pod-identity-creation.sh
+
+    - name: Setup Flux
+      working-directory: './scripts'
+      run: |
+        export ACR_SPN_ID=${{ secrets.ACR_SPN_ID }}
+        export ACR_SPN_PASSWORD=${{ secrets.ACR_SPN_PASSWORD }}
+        export CLUSTER_BOOTSTRAP_PATH=./cluster-manifests/${{ env.SERVICE_TYPE_MESH }}
+        
+        bash ./aks-flux-configuration.sh
