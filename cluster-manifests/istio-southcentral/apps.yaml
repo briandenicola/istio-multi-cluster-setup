@@ -4,12 +4,12 @@ metadata:
   name: bookstore
   namespace: flux-system
 spec:
-  interval: 10m0s
+  interval: 30m0s
   dependsOn:
-    - name: osm-ingress
+  - name: istio-system
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./apps/osm-bookstore
+  path: ./addons/apps/istio-bookstore
   prune: true
   validation: client

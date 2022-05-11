@@ -1,55 +1,61 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1beta1
 kind: Kustomization
 metadata:
-  name: istio-operator
+  name: keda
   namespace: flux-system
 spec:
   interval: 10m0s
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-  path: ./apps/addons/meshes/istio/crd
-  prune: true
-  validation: client
-  healthChecks:
-    - apiVersion: apps/v1
-      kind: Deployment
-      name: istio-operator
-      namespace: istio-operator
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1beta1
-kind: Kustomization
-metadata:
-  name: istio-system
-  namespace: flux-system
-spec:
-  dependsOn:
-    - name: istio-operator
-  interval: 10m0s
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-  path: ../apps/addons/meshes/istio/configuration
-  prune: true
-  validation: client
-  healthChecks:
-    - apiVersion: apps/v1
-      kind: Deployment
-      name: istiod
-      namespace: istio-system
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1beta1
-kind: Kustomization
-metadata:
-  name: istio-gateway
-  namespace: flux-system
-spec:
   dependsOn:
     - name: istio-system
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./apps/components/keda
+  prune: true
+  validation: client
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta1
+kind: Kustomization
+metadata:
+  name: knative
+  namespace: flux-system
+spec:
+  interval: 10m0s
+  dependsOn:
+    - name: istio-system
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./apps/components/knative
+  prune: true
+  validation: client
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta1
+kind: Kustomization
+metadata:
+  name: dapr
+  namespace: flux-system
+spec:
+  interval: 10m0s
+  dependsOn:
+    - name: istio-system
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./apps/components/dapr
+  prune: true
+  validation: client
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta1
+kind: Kustomization
+metadata:
+  name: kured
+  namespace: flux-system
+spec:
   interval: 10m0s
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./apps/addons/meshes/istio/gateway
+  path: ./apps/components/kured
   prune: true
   validation: client

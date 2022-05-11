@@ -10,7 +10,7 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./apps/addons/keda
+  path: ./apps/components/keda
   prune: true
   validation: client
 ---
@@ -26,7 +26,7 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./apps/addons/knative
+  path: ./apps/components/knative
   prune: true
   validation: client
 ---
@@ -42,7 +42,7 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./apps/addons/dapr
+  path: ./apps/components/dapr
   prune: true
   validation: client
 ---
@@ -56,21 +56,6 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./apps/addons/kured
+  path: ./apps/components/kured
   prune: true
   validation: client
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1beta1
-kind: Kustomization
-metadata:
-  name: workload-identity
-  namespace: flux-system
-spec:
-  interval: 10m0s
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-  path: ./apps/addons/workload-identity
-  prune: true
-  validation: client
-

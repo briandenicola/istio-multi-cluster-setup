@@ -1,15 +1,15 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1beta1
 kind: Kustomization
 metadata:
-  name: dapr
+  name: bookstore
   namespace: flux-system
 spec:
-  interval: 10m0s
+  interval: 30m0s
   dependsOn:
-    - name: osm-system
+  - name: istio-system
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./apps/addons/dapr
+  path: ./addons/apps/istio-bookstore
   prune: true
   validation: client
