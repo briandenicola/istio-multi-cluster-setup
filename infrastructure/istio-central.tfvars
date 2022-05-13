@@ -1,6 +1,5 @@
 location = "centralus"
 agent_count = 3
-open_service_mesh_enabled = false
 k8s_vnet_resource_group_name = "DevSub02_Network_Central_RG"
 k8s_vnet = "DevSub02-Vnet-Sandbox-001"
 k8s_subnet = "kubernetes"
