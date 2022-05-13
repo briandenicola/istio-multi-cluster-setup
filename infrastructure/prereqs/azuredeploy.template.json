@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "azure_firewall_name": {
-            "defaultValue": "bjdproxy-southcentral",
+            "defaultValue": "bjdproxy-central",
             "type": "String"
         },
         "default_nsg_name": {
@@ -15,19 +15,19 @@
             "type": "String"
         },
         "public_ip_address_name": {
-            "defaultValue": "bjdproxy-southcentral-pip",
+            "defaultValue": "bjdproxy-central-pip",
             "type": "String"
         },
         "routetable_name": {
-            "defaultValue": "bjdproxy-southcentral-routetable",
+            "defaultValue": "bjdproxy-central-routetable",
             "type": "String"
         },
         "firewallpolicy_name": {
-            "defaultValue": "bjdproxy-southcentral-policy",
+            "defaultValue": "bjdproxy-central-policy",
             "type": "String"
         },
         "virtual_network_name": {
-            "defaultValue": "DevSub02-Vnet-Sandbox-002",
+            "defaultValue": "DevSub02-Vnet-Sandbox-001",
             "type": "String"
         },
         "location": {
@@ -476,7 +476,7 @@
                                 "targetFqdns": [
                                     "bjd145.azurecr.io",
                                     "bjd145.centralus.data.azurecr.io",
-                                    "bjd145.southcentralus.data.azurecr.io"
+                                    "bjd145.centralus.data.azurecr.io"
                                 ],
                                 "targetUrls": [],
                                 "terminateTLS": false,
@@ -544,7 +544,7 @@
                                 "webCategories": [],
                                 "targetFqdns": [
                                     "centralus.api.cognitive.microsoft.com",
-                                    "southcentralus.api.cognitive.microsoft.com"
+                                    "centralus.api.cognitive.microsoft.com"
                                 ],
                                 "targetUrls": [],
                                 "terminateTLS": false,
@@ -962,13 +962,6 @@
             "type": "Microsoft.Network/networkWatchers",
             "apiVersion": "2020-11-01",
             "name": "NetworkWatcher_centralus",
-            "location": "centralus",
-            "properties": {}
-        },
-        {
-            "type": "Microsoft.Network/networkWatchers",
-            "apiVersion": "2020-11-01",
-            "name": "NetworkWatcher_southcentralus",
             "location": "[parameters('location')]",
             "properties": {}
         },
