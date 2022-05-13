@@ -996,7 +996,7 @@
                         "properties": {
                             "addressPrefix": "0.0.0.0/0",
                             "nextHopType": "VirtualAppliance",
-                            "nextHopIpAddress": "10.7.254.4",
+                            "nextHopIpAddress": "10.8.254.4",
                             "hasBgpOverride": false
                         }
                     },
@@ -1061,7 +1061,7 @@
             "properties": {
                 "addressSpace": {
                     "addressPrefixes": [
-                        "10.7.0.0/16"
+                        "10.8.0.0/16"
                     ]
                 },
                 "dhcpOptions": {
@@ -1073,7 +1073,7 @@
                     {
                         "name": "kubernetes",
                         "properties": {
-                            "addressPrefix": "10.7.4.0/22",
+                            "addressPrefix": "10.8.4.0/22",
                             "networkSecurityGroup": {
                                 "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('default_nsg_name'))]"
                             },
@@ -1093,7 +1093,7 @@
                     {   
                         "name": "AzureFirewallSubnet",
                         "properties": {
-                            "addressPrefix": "10.7.254.0/24",
+                            "addressPrefix": "10.8.254.0/24",
                             "serviceEndpoints": [
                                 {
                                     "service": "Microsoft.KeyVault",
@@ -1110,7 +1110,7 @@
                     {
                         "name": "AzureBastionSubnet",
                         "properties": {
-                            "addressPrefix": "10.7.0.0/24",
+                            "addressPrefix": "10.8.0.0/24",
                             "networkSecurityGroup": {
                                 "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('internet_nsg_name'))]"
                             },
@@ -1130,7 +1130,7 @@
                     {
                         "name": "private-endpoints",
                         "properties": {
-                            "addressPrefix": "10.7.2.0/24",
+                            "addressPrefix": "10.8.2.0/24",
                             "networkSecurityGroup": {
                                 "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('default_nsg_name'))]"
                             },
@@ -1150,7 +1150,7 @@
                     {
                         "name": "Servers",
                         "properties": {
-                            "addressPrefix": "10.7.1.0/24",
+                            "addressPrefix": "10.8.1.0/24",
                             "networkSecurityGroup": {
                                 "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('default_nsg_name'))]"
                             },
