@@ -20,7 +20,6 @@ jobs:
       ARM_SUBSCRIPTION_ID: ${{ secrets.SOUTHCENTRAL_SUBSCRIPTION_ID }}
       CORE_SUBSCRIPTION_ID: ${{ secrets.CORE_SUBSCRIPTION_ID }}
       ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
-      GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
       CLUSTER_RG:  DevSub02_K8S_${{ github.event.inputs.southcentral_cluster_name }}_RG
       CLUSTER_NAME: ${{ github.event.inputs.southcentral_cluster_name }}
 
@@ -61,7 +60,6 @@ jobs:
       ARM_SUBSCRIPTION_ID: ${{ secrets.CENTRAL_SUBSCRIPTION_ID }}
       CORE_SUBSCRIPTION_ID: ${{ secrets.CORE_SUBSCRIPTION_ID }}
       ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
-      GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
       CLUSTER_RG:  DevSub02_K8S_${{ github.event.inputs.central_cluster_name }}_RG
       CLUSTER_NAME: ${{ github.event.inputs.central_cluster_name }}
 
@@ -103,6 +101,7 @@ jobs:
       SC_CLUSTER_NAME: ${{ github.event.inputs.southcentral_cluster_name }}
       CE_CLUSTER_RG:  DevSub02_K8S_${{ github.event.inputs.central_cluster_name }}_RG
       CE_CLUSTER_NAME: ${{ github.event.inputs.central_cluster_name }}
+      GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
       GITHUB_ACCOUNT: briandenicola
       GITHUB_REPO: istio-multi-primary-setup
       REPO_BRANCH: master
