@@ -10,7 +10,7 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./apps/components/keda
+  path: ./cluster-addons/components/keda
   prune: true
   validation: client
 ---
@@ -26,7 +26,7 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./apps/components/knative
+  path: ./cluster-addons/components/knative
   prune: true
   validation: client
 ---
@@ -42,7 +42,7 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./apps/components/dapr
+  path: ./cluster-addons/components/dapr
   prune: true
   validation: client
 ---
@@ -56,6 +56,6 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./apps/components/kured
+  path: ./cluster-addons/components/kured
   prune: true
   validation: client

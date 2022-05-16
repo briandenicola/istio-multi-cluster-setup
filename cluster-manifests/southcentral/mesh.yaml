@@ -29,7 +29,7 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./cluster-manifests/southcentral/istio
+  path: ./istio-manifests/southcentral/
   prune: true
   validation: client
   healthChecks:
