@@ -8,7 +8,7 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./addons/components/istio-crd
+  path: ./cluster-addons/components/istio-crd
   prune: true
   validation: client
   healthChecks:
