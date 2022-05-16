@@ -163,7 +163,7 @@ jobs:
         export SUBSCRIPTION_ID=${{ secrets.SOUTHCENTRAL_SUBSCRIPTION_ID }}
         export CLUSTER_NAME=${{ env.SC_CLUSTER_NAME }}
         export CLUSTER_RG=${{ env.SC_CLUSTER_RG }}
-        export CLUSTER_BOOTSTRAP_PATH=./cluster-manifests/istio-southcentral
+        export CLUSTER_BOOTSTRAP_PATH=./cluster-manifests/southcentral
         
         bash ./aks-flux-configuration.sh
 
@@ -173,7 +173,7 @@ jobs:
         export SUBSCRIPTION_ID=${{ secrets.CENTRAL_SUBSCRIPTION_ID }}
         export CLUSTER_NAME=${{ env.CE_CLUSTER_NAME }}
         export CLUSTER_RG=${{ env.CE_CLUSTER_RG }}
-        export CLUSTER_BOOTSTRAP_PATH=./cluster-manifests/istio-central
+        export CLUSTER_BOOTSTRAP_PATH=./cluster-manifests/central
 
         bash ./aks-flux-configuration.sh
 
