@@ -4,5 +4,3 @@ resources:
   - zipkin.yaml
   - container-azm-ms-agentconfig.yaml
   - istio-system.yaml
-  - istio-gateway.yaml
-  - istio-ingress-deployment.yaml
