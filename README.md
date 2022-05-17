@@ -1,12 +1,7 @@
 # Introduction 
-_Docs is a work in Progress_
+
+This repo is to automate the setup of a Multi-primary Istio Mesh of two AKS clusters
+
 * Reference: https://istio.io/latest/docs/setup/install/multicluster/multi-primary/
 
-# Detail Deployment Guide
-## Resources Created
-
-# Infrastructure
-## Diagram
-
-# Kubernetes Resources 
-## Diagram
+_Docs is a work in Progress_
