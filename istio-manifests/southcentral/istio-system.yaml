@@ -5,7 +5,7 @@ metadata:
   labels:
     istio-operator-managed: Reconcile
     istio-injection: disabled
-    topology.istio.io/network: centralus-network
+    topology.istio.io/network: southcentralus-network
 ---
 apiVersion: v1
 kind: Namespace
