@@ -10,5 +10,5 @@ az account set -s ${SECONDARY_SUBSCRIPTION_ID}
 az aks get-credentials -g ${SECONDARY_CLUSTER_RG} -n ${SECONDARY_CLUSTER_NAME} --overwrite-existing
 kubelogin convert-kubeconfig -l msi
 
-istioctl x create-remote-secret --context="${PRIMARY_CLUSTER_NAME}" --name="${PRIMARY_CLUSTER_NAME}"| kubectl apply -f - --context="${SECONDARY_CLUSTER_NAME}"
-istioctl x create-remote-secret --context="${SECONDARY_CLUSTER_NAME}" --name="${SECONDARY_CLUSTER_NAME}"| kubectl apply -f - --context="${PRIMARY_CLUSTER_NAME}"
+istioctl x create-remote-secret --context="${PRIMARY_CLUSTER_NAME}" --name="${PRIMARY_CLUSTER_NAME}" | kubectl --context="${SECONDARY_CLUSTER_NAME}" apply -f - 
+istioctl x create-remote-secret --context="${SECONDARY_CLUSTER_NAME}" --name="${SECONDARY_CLUSTER_NAME}" | kubectl --context="${PRIMARY_CLUSTER_NAME}" apply -f - 
