@@ -18,7 +18,7 @@ spec:
     metadata:
       labels:
         app: istio-gw-ingress
-        aadpodidbinding: e616cus-istio-pod-identity 
+        aadpodidbinding: g578cus-istio-pod-identity 
     spec:
       containers:
       - name: istio-gw-ingress

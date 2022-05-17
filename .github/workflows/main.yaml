@@ -3,9 +3,9 @@ on:
   workflow_dispatch:
     inputs:
       central_cluster_name:
-        description: 'The name of the Central Cluster to create - e616cus'
+        description: 'The name of the Central Cluster to create - g578cus'
         required: true
-        default: 'e616cus'
+        default: 'g578cus'
       southcentral_cluster_name:
         description: 'The name of the South Central Cluster to create - e616scus'
         required: true

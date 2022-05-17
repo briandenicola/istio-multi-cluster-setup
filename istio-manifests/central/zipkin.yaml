@@ -16,7 +16,7 @@ spec:
       labels:
         app: opentelemetry
         component: otel-collector
-        aadpodidbinding: e616cus-istio-pod-identity
+        aadpodidbinding: g578cus-istio-pod-identity
     spec:
       containers:
       - name: otel-collector
@@ -61,7 +61,7 @@ spec:
   provider: azure
   parameters:
     usePodIdentity: "true"                                        
-    keyvaultName: e616cus-kv                                     
+    keyvaultName: g578cus-kv                                     
     objects:  |
       array:
         - |

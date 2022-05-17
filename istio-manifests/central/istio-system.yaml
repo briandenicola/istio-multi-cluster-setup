@@ -37,7 +37,7 @@ spec:
     global:
       meshID: bjd-mesh
       multiCluster:
-        clusterName: e616cus
+        clusterName: g578cus
       network: centralus-network
       tracer:
         zipkin:
@@ -59,7 +59,7 @@ spec:
       namespace: default
       enabled: true
       label:
-        aadpodidbinding: e616cus-istio-pod-identity
+        aadpodidbinding: g578cus-istio-pod-identity
       k8s:
         podDisruptionBudget:
           minAvailable: 1
