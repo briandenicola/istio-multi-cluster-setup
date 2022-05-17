@@ -104,7 +104,7 @@ jobs:
       GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
       GITHUB_ACCOUNT: briandenicola
       GITHUB_REPO: istio-multi-primary-setup
-      REPO_BRANCH: master
+      REPO_BRANCH: main
 
     steps:
     - name: Setup Service Mesh Pod Identity - South Central
