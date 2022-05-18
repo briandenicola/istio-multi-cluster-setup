@@ -5,7 +5,7 @@ metadata:
   labels:
     istio-operator-managed: Reconcile
     istio-injection: disabled
-    topology.istio.io/network: southcentralus-network
+    topology.istio.io/network: southcentralus
 ---
 apiVersion: v1
 kind: Namespace
@@ -37,7 +37,7 @@ spec:
       meshID: examplemesh
       multiCluster:
         clusterName: e616scus
-      network: southcentralus-network
+      network: southcentralus
       tracer:
         zipkin:
           address: otel-collector.default.svc.cluster.local:9411
@@ -48,14 +48,14 @@ spec:
           minAvailable: 1
     egressGateways:
     - name: istio-egressgateway
-      namespace: default
+      namespace: istio-system
       enabled: true
       k8s:
         podDisruptionBudget:
           minAvailable: 1
     ingressGateways:
     - name: istio-ingressgateway
-      namespace: default
+      namespace: istio-system
       enabled: true
       label:
         aadpodidbinding: e616scus-istio-pod-identity
@@ -70,9 +70,27 @@ spec:
       label:
         istio: eastwestgateway
         app: istio-eastwestgateway
+        topology.istio.io/network: southcentralus
       k8s:
+        env:
+        - name: ISTIO_META_REQUESTED_NETWORK_VIEW
+          value: southcentralus
         podDisruptionBudget:
           minAvailable: 1
+        service:
+            ports:
+              - name: status-port
+                port: 15021
+                targetPort: 15021
+              - name: tls
+                port: 15443
+                targetPort: 15443
+              - name: tls-istiod
+                port: 15012
+                targetPort: 15012
+              - name: tls-webhook
+                port: 15017
+                targetPort: 15017
         serviceAnnotations:
           service.beta.kubernetes.io/azure-load-balancer-internal: "true"
   addonComponents:

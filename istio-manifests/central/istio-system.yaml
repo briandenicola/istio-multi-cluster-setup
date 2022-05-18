@@ -6,7 +6,7 @@ metadata:
   labels:
     istio-operator-managed: Reconcile
     istio-injection: disabled
-    topology.istio.io/network: centralus-network
+    topology.istio.io/network: centralus
 ---
 apiVersion: v1
 kind: Namespace
@@ -34,11 +34,14 @@ spec:
         zipkin:
           address: otel-collector.default.svc.cluster.local:9411
   values:
+    gateways:
+      istio-ingressgateway:
+        injectionTemplate: gateway
     global:
       meshID: examplemesh
       multiCluster:
         clusterName: g578cus
-      network: centralus-network
+      network: centralus
       tracer:
         zipkin:
           address: otel-collector.default.svc.cluster.local:9411
@@ -71,9 +74,27 @@ spec:
       label:
         istio: eastwestgateway
         app: istio-eastwestgateway
+        topology.istio.io/network: centralus
       k8s:
+        env:
+        - name: ISTIO_META_REQUESTED_NETWORK_VIEW
+          value: centralus
         podDisruptionBudget:
           minAvailable: 1
+        service:
+            ports:
+              - name: status-port
+                port: 15021
+                targetPort: 15021
+              - name: tls
+                port: 15443
+                targetPort: 15443
+              - name: tls-istiod
+                port: 15012
+                targetPort: 15012
+              - name: tls-webhook
+                port: 15017
+                targetPort: 15017
         serviceAnnotations:
           service.beta.kubernetes.io/azure-load-balancer-internal: "true"
   addonComponents:
