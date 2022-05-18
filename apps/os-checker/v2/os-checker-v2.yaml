@@ -1,0 +1,57 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: whatos
+  labels:
+    istio-injection: enabled
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: whatos
+  namespace: whatos
+  labels:
+    app: whatos
+    service: whatos
+spec:
+  ports:
+  - port: 8081
+    name: http
+  type: ClusterIP 
+  selector:
+    app: whatos
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: whatos-v2
+  namespace: whatos
+  labels: 
+    app: whatos
+    version: v2
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: whatos
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: whatos
+        version: v2
+    spec:
+      containers:
+      - name: whatos
+        image: bjd145/whatos:2.0 
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "250m"
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8081
