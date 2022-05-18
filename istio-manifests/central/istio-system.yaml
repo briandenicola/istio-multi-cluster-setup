@@ -34,9 +34,6 @@ spec:
         zipkin:
           address: otel-collector.default.svc.cluster.local:9411
   values:
-    gateways:
-      istio-ingressgateway:
-        injectionTemplate: gateway
     global:
       meshID: examplemesh
       multiCluster:
