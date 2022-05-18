@@ -17,11 +17,15 @@ jobs:
     runs-on: self-hosted
     env:
       ARM_USE_MSI: true 
+      ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
       ARM_SUBSCRIPTION_ID: ${{ secrets.SOUTHCENTRAL_SUBSCRIPTION_ID }}
       CORE_SUBSCRIPTION_ID: ${{ secrets.CORE_SUBSCRIPTION_ID }}
-      ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
       CLUSTER_RG:  DevSub02_K8S_${{ github.event.inputs.southcentral_cluster_name }}_RG
       CLUSTER_NAME: ${{ github.event.inputs.southcentral_cluster_name }}
+      GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
+      GITHUB_ACCOUNT: briandenicola
+      GITHUB_REPO: istio-multi-primary-setup
+      REPO_BRANCH: main
 
     defaults:
       run:
@@ -51,17 +55,50 @@ jobs:
       id: apply
       run: terraform apply -auto-approve ${{ env.CLUSTER_NAME }}.plan
 
+    - name: Setup Service Mesh Pod Identity - South Central
+      working-directory: './scripts'
+      run: |
+        export SUBSCRIPTION_ID=${{ secrets.SOUTHCENTRAL_SUBSCRIPTION_ID }}
+        export IDENTITY_NAME=${{ env.CLUSTER_NAME }}-istio-pod-identity
+        export IDENTITY_RG=${{ env.CLUSTER_RG }}
+        export NAMESPACE="default"
+        
+        bash ./aks-pod-identity-creation.sh
+
+    - name: Setup Istio Trusted CA Store - South Central
+      working-directory: './scripts'
+      run: |
+        export SUBSCRIPTION_ID=${{ secrets.SOUTHCENTRAL_SUBSCRIPTION_ID }}
+        export CLUSTER_CA_CERT=${{ secrets.SC_CLUSTER_CA_CERT }}
+        export CLUSTER_CA_KEY=${{ secrets.SC_CLUSTER_CA_KEY }}
+        export CLUSTER_CERT_CHAIN=${{ secrets.SC_CLUSTER_CERT_CHAIN }}
+        export CLUSTER_ROOT_CA_CERT=${{ secrets.ROOT_CA_CERT }}        
+
+        bash ./istio-create-trusted-ca.sh
+
+    - name: Setup Flux - South Central
+      working-directory: './scripts'
+      run: |
+        export SUBSCRIPTION_ID=${{ secrets.SOUTHCENTRAL_SUBSCRIPTION_ID }}
+        export CLUSTER_BOOTSTRAP_PATH=./cluster-manifests/southcentral
+        
+        bash ./aks-flux-configuration.sh
+
   deploy-central:
     name: Deploys Central Cluster
     runs-on: self-hosted
     needs: [deploy-southcentral]
     env:
       ARM_USE_MSI: true 
+      ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
       ARM_SUBSCRIPTION_ID: ${{ secrets.CENTRAL_SUBSCRIPTION_ID }}
       CORE_SUBSCRIPTION_ID: ${{ secrets.CORE_SUBSCRIPTION_ID }}
-      ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
       CLUSTER_RG:  DevSub02_K8S_${{ github.event.inputs.central_cluster_name }}_RG
       CLUSTER_NAME: ${{ github.event.inputs.central_cluster_name }}
+      GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
+      GITHUB_ACCOUNT: briandenicola
+      GITHUB_REPO: istio-multi-primary-setup
+      REPO_BRANCH: main
 
     defaults:
       run:
@@ -90,9 +127,37 @@ jobs:
     - name: "Terraform Apply"
       id: apply
       run: terraform apply -auto-approve ${{ env.CLUSTER_NAME }}.plan
+    - name: Setup Service Mesh Pod Identity - Central
+      working-directory: './scripts'
+      run: |
+        export SUBSCRIPTION_ID=${{ secrets.CENTRAL_SUBSCRIPTION_ID }}
+        export IDENTITY_NAME=${{ env.CLUSTER_NAME }}-istio-pod-identity
+        export IDENTITY_RG=${{ env.CLUSTER_RG }}
+        export NAMESPACE="default"
+        
+        bash ./aks-pod-identity-creation.sh
+
+    - name: Setup Istio Trusted CA Store - Central
+      working-directory: './scripts'
+      run: |
+        export SUBSCRIPTION_ID=${{ secrets.CENTRAL_SUBSCRIPTION_ID }}
+        export CLUSTER_CA_CERT=${{ secrets.CE_CLUSTER_CA_CERT }}
+        export CLUSTER_CA_KEY=${{ secrets.CE_CLUSTER_CA_KEY }}
+        export CLUSTER_CERT_CHAIN=${{ secrets.CE_CLUSTER_CERT_CHAIN }}
+        export CLUSTER_ROOT_CA_CERT=${{ secrets.ROOT_CA_CERT }}
+        
+        bash ./istio-create-trusted-ca.sh
+
+    - name: Setup Flux - Central
+      working-directory: './scripts'
+      run: |
+        export SUBSCRIPTION_ID=${{ secrets.CENTRAL_SUBSCRIPTION_ID }}
+        export CLUSTER_BOOTSTRAP_PATH=./cluster-manifests/central
+
+        bash ./aks-flux-configuration.sh
 
   post-setup-configuration:
-    name: Configure Istio
+    name: Final Istio Configuration
     runs-on: self-hosted
     needs: [deploy-southcentral,deploy-central]
     env:
@@ -101,82 +166,8 @@ jobs:
       SC_CLUSTER_NAME: ${{ github.event.inputs.southcentral_cluster_name }}
       CE_CLUSTER_RG:  DevSub02_K8S_${{ github.event.inputs.central_cluster_name }}_RG
       CE_CLUSTER_NAME: ${{ github.event.inputs.central_cluster_name }}
-      GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
-      GITHUB_ACCOUNT: briandenicola
-      GITHUB_REPO: istio-multi-primary-setup
-      REPO_BRANCH: main
 
     steps:
-    - name: Setup Service Mesh Pod Identity - South Central
-      working-directory: './scripts'
-      run: |
-        export SUBSCRIPTION_ID=${{ secrets.SOUTHCENTRAL_SUBSCRIPTION_ID }}
-        export CLUSTER_NAME=${{ env.SC_CLUSTER_NAME }}
-        export CLUSTER_RG=${{ env.SC_CLUSTER_RG }}
-        export IDENTITY_NAME=${{ env.SC_CLUSTER_NAME }}-istio-pod-identity
-        export IDENTITY_RG=${{ env.SC_CLUSTER_RG }}
-        export NAMESPACE="default"
-        
-        bash ./aks-pod-identity-creation.sh
-
-    - name: Setup Service Mesh Pod Identity - Central
-      working-directory: './scripts'
-      run: |
-        export SUBSCRIPTION_ID=${{ secrets.CENTRAL_SUBSCRIPTION_ID }}
-        export CLUSTER_NAME=${{ env.CE_CLUSTER_NAME }}
-        export CLUSTER_RG=${{ env.CE_CLUSTER_RG }}
-        export IDENTITY_NAME=${{ env.CE_CLUSTER_NAME }}-istio-pod-identity
-        export IDENTITY_RG=${{ env.CE_CLUSTER_RG }}
-        export NAMESPACE="default"
-        
-        bash ./aks-pod-identity-creation.sh
-
-    - name: Setup Istio Trusted CA Store - South Central
-      working-directory: './scripts'
-      run: |
-        export SUBSCRIPTION_ID=${{ secrets.SOUTHCENTRAL_SUBSCRIPTION_ID }}
-        export CLUSTER_NAME=${{ env.SC_CLUSTER_NAME }}
-        export CLUSTER_RG=${{ env.SC_CLUSTER_RG }}
-        export CLUSTER_CA_CERT=${{ secrets.SC_CLUSTER_CA_CERT }}
-        export CLUSTER_CA_KEY=${{ secrets.SC_CLUSTER_CA_KEY }}
-        export CLUSTER_CERT_CHAIN=${{ secrets.SC_CLUSTER_CERT_CHAIN }}
-        export CLUSTER_ROOT_CA_CERT=${{ secrets.ROOT_CA_CERT }}        
-
-        bash ./istio-create-trusted-ca.sh
-
-    - name: Setup Istio Trusted CA Store - Central
-      working-directory: './scripts'
-      run: |
-        export SUBSCRIPTION_ID=${{ secrets.CENTRAL_SUBSCRIPTION_ID }}
-        export CLUSTER_NAME=${{ env.CE_CLUSTER_NAME }}
-        export CLUSTER_RG=${{ env.CE_CLUSTER_RG }}
-        export CLUSTER_CA_CERT=${{ secrets.CE_CLUSTER_CA_CERT }}
-        export CLUSTER_CA_KEY=${{ secrets.CE_CLUSTER_CA_KEY }}
-        export CLUSTER_CERT_CHAIN=${{ secrets.CE_CLUSTER_CERT_CHAIN }}
-        export CLUSTER_ROOT_CA_CERT=${{ secrets.ROOT_CA_CERT }}
-        
-        bash ./istio-create-trusted-ca.sh
-
-    - name: Setup Flux - South Central
-      working-directory: './scripts'
-      run: |
-        export SUBSCRIPTION_ID=${{ secrets.SOUTHCENTRAL_SUBSCRIPTION_ID }}
-        export CLUSTER_NAME=${{ env.SC_CLUSTER_NAME }}
-        export CLUSTER_RG=${{ env.SC_CLUSTER_RG }}
-        export CLUSTER_BOOTSTRAP_PATH=./cluster-manifests/southcentral
-        
-        bash ./aks-flux-configuration.sh
-
-    - name: Setup Flux - Central
-      working-directory: './scripts'
-      run: |
-        export SUBSCRIPTION_ID=${{ secrets.CENTRAL_SUBSCRIPTION_ID }}
-        export CLUSTER_NAME=${{ env.CE_CLUSTER_NAME }}
-        export CLUSTER_RG=${{ env.CE_CLUSTER_RG }}
-        export CLUSTER_BOOTSTRAP_PATH=./cluster-manifests/central
-
-        bash ./aks-flux-configuration.sh
-
     - name: Setup Istio Remote Secrets
       working-directory: './scripts'
       run: |
