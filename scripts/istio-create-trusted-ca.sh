@@ -8,7 +8,7 @@ az account set -s ${SUBSCRIPTION_ID}
 az aks get-credentials -g ${CLUSTER_RG} -n ${CLUSTER_NAME} --overwrite-existing
 kubelogin convert-kubeconfig -l msi
 
-kubectl create ns ${NAMESPACE}
+kubectl create ns ${NAMESPACE} || true
 cat <<EOF | kubectl --context="${CLUSTER_NAME}" apply -f -
 apiVersion: v1
 kind: Secret
