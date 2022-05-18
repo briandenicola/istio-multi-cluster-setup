@@ -35,7 +35,7 @@ spec:
           address: otel-collector.default.svc.cluster.local:9411
   values:
     global:
-      meshID: bjd-mesh
+      meshID: examplemesh
       multiCluster:
         clusterName: g578cus
       network: centralus-network

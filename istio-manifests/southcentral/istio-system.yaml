@@ -34,7 +34,7 @@ spec:
           address: otel-collector.default.svc.cluster.local:9411
   values:
     global:
-      meshID: bjd-mesh-demo
+      meshID: examplemesh
       multiCluster:
         clusterName: e616scus
       network: southcentralus-network
