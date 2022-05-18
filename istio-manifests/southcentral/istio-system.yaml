@@ -58,6 +58,8 @@ spec:
       namespace: istio-system
       enabled: true
       label:
+        istio: ingressgateway
+        app: istio-ingressgateway 
         aadpodidbinding: e616scus-istio-pod-identity
       k8s:
         podDisruptionBudget:
@@ -78,19 +80,19 @@ spec:
         podDisruptionBudget:
           minAvailable: 1
         service:
-            ports:
-              - name: status-port
-                port: 15021
-                targetPort: 15021
-              - name: tls
-                port: 15443
-                targetPort: 15443
-              - name: tls-istiod
-                port: 15012
-                targetPort: 15012
-              - name: tls-webhook
-                port: 15017
-                targetPort: 15017
+          ports:
+            - name: status-port
+              port: 15021
+              targetPort: 15021
+            - name: tls
+              port: 15443
+              targetPort: 15443
+            - name: tls-istiod
+              port: 15012
+              targetPort: 15012
+            - name: tls-webhook
+              port: 15017
+              targetPort: 15017
         serviceAnnotations:
           service.beta.kubernetes.io/azure-load-balancer-internal: "true"
   addonComponents:
