@@ -15,7 +15,7 @@ kind: Secret
 metadata:
   name: cacerts
   namespace: ${NAMESPACE}
-type: Opaque
+type: istio.io/ca-root
 data:
   ca-cert.pem: ${CLUSTER_CA_CERT}
   ca-key.pem: ${CLUSTER_CA_KEY}
