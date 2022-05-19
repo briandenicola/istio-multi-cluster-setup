@@ -3,13 +3,13 @@ on:
   workflow_dispatch:
     inputs:
       central_cluster_name:
-        description: 'The name of the Central Cluster to create - g578cus'
+        description: 'The name of the Central Cluster to create - g6258cus'
         required: true
-        default: 'g578cus'
+        default: 'g6258cus'
       southcentral_cluster_name:
-        description: 'The name of the South Central Cluster to create - e616scus'
+        description: 'The name of the South Central Cluster to create - a212scus'
         required: true
-        default: 'e616scus'
+        default: 'a212scus'
       
 jobs:
   deploy-southcentral:

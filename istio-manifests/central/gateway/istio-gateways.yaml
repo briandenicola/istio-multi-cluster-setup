@@ -33,7 +33,7 @@ spec:
       key: tls.crt
   parameters:
     usePodIdentity: "true"                                        
-    keyvaultName: g578cus-kv                                            
+    keyvaultName: g6258cus-kv                                            
     objects:  |
       array:
         - |

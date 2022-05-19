@@ -36,7 +36,7 @@ spec:
     global:
       meshID: examplemesh
       multiCluster:
-        clusterName: e616scus
+        clusterName: a212scus
       network: southcentralus
       tracer:
         zipkin:
@@ -60,7 +60,7 @@ spec:
       label:
         istio: ingressgateway
         app: istio-ingressgateway 
-        aadpodidbinding: e616scus-istio-pod-identity
+        aadpodidbinding: a212scus-istio-pod-identity
       k8s:
         podDisruptionBudget:
           minAvailable: 1

@@ -37,7 +37,7 @@ spec:
     global:
       meshID: examplemesh
       multiCluster:
-        clusterName: g578cus
+        clusterName: g6258cus
       network: centralus
       tracer:
         zipkin:
@@ -61,7 +61,7 @@ spec:
       label:
         istio: ingressgateway
         app: istio-ingressgateway 
-        aadpodidbinding: g578cus-istio-pod-identity
+        aadpodidbinding: g6258cus-istio-pod-identity
       k8s:
         podDisruptionBudget:
           minAvailable: 1

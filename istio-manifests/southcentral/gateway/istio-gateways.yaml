@@ -33,7 +33,7 @@ spec:
       key: tls.crt
   parameters:
     usePodIdentity: "true"                                        
-    keyvaultName: e616scus-kv                                            
+    keyvaultName: a212scus-kv                                            
     objects:  |
       array:
         - |
