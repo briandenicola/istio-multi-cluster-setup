@@ -9,7 +9,7 @@ metadata:
 apiVersion: v1
 kind: Service
 metadata:
-  name: whatos
+  name: whatos-api
   namespace: whatos
   labels:
     app: whatos
