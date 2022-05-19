@@ -48,7 +48,7 @@ jobs:
       
     - name: "Terraform Plan"
       id: plan
-      run:  terraform plan -out="${{ env.CLUSTER_NAME }}.plan" -var "cluster_name=${{ env.CLUSTER_NAME }}" -var "resource_group_name=${{ env.CLUSTER_RG }}" -var "certificate_base64_encoded=${{ secrets.CERTIFICATE }}"  -var "certificate_password=${{ secrets.CERT_PASSWORD }}" -var-file="istio-southcentral.tfvars"
+      run:  Zterraform plan -out="${{ env.CLUSTER_NAME }}.plan" -var "cluster_name=${{ env.CLUSTER_NAME }}" -var "resource_group_name=${{ env.CLUSTER_RG }}" -var "certificate_base64_encoded=${{ secrets.CERTIFICATE }}"  -var "certificate_password=${{ secrets.CERT_PASSWORD }}" -var-file="istio-southcentral.tfvars"
       continue-on-error: false 
 
     - name: "Terraform Apply"
@@ -117,7 +117,7 @@ jobs:
 
     - name: "Terraform Init"
       id: init
-      run: terraform init -backend=true -backend-config="tenant_id=${{ env.ARM_TENANT_ID }}" -backend-config="subscription_id=${{ env.CORE_SUBSCRIPTION_ID }}" -backend-config="key=${{ env.CLUSTER_NAME }}.terraform.tfstate"
+      run: terraform init -backend=true -backend-config="tenant_id=${{ env.ARM_TENANT_ID }}" -backend-config="subscription_id=${{ env.CORE_SUBSCRIPTION_ID }}" -backend-config="key=${{ env.CLUSTER_NAME }}.terraform.tfstate" -reconfigure
       
     - name: "Terraform Plan"
       id: plan
