@@ -16,7 +16,7 @@ spec:
       labels:
         app: opentelemetry
         component: otel-collector
-        aadpodidbinding: g6258cus-istio-pod-identity
+        aadpodidbinding: default-pod-identity
     spec:
       containers:
       - name: otel-collector
@@ -26,7 +26,7 @@ spec:
           - "--config=/conf/otel-collector-config"
         resources:
           limits:
-            cpu: 1
+            cpu: 1000m
             memory: 2Gi
           requests:
             cpu: 200m
@@ -61,7 +61,7 @@ spec:
   provider: azure
   parameters:
     usePodIdentity: "true"                                        
-    keyvaultName: g6258cus-kv                                     
+    keyvaultName: default-keyvault                                     
     objects:  |
       array:
         - |

@@ -1,0 +1,9 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: istio-gw-ingress
+spec:
+  template:
+    metadata:
+      labels:
+        aadpodidbinding: a212scus-istio-pod-identity

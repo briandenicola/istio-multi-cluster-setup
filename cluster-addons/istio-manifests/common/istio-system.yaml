@@ -1,3 +1,4 @@
+---
 apiVersion: v1
 kind: Namespace
 metadata:
@@ -5,7 +6,7 @@ metadata:
   labels:
     istio-operator-managed: Reconcile
     istio-injection: disabled
-    topology.istio.io/network: southcentralus
+    topology.istio.io/network: centralus
 ---
 apiVersion: v1
 kind: Namespace
@@ -36,8 +37,8 @@ spec:
     global:
       meshID: examplemesh
       multiCluster:
-        clusterName: a212scus
-      network: southcentralus
+        clusterName: default-cluster-name
+      network: default-region
       tracer:
         zipkin:
           address: otel-collector.default.svc.cluster.local:9411
@@ -60,7 +61,7 @@ spec:
       label:
         istio: ingressgateway
         app: istio-ingressgateway 
-        aadpodidbinding: a212scus-istio-pod-identity
+        aadpodidbinding: default-pod-identity
       k8s:
         podDisruptionBudget:
           minAvailable: 1
@@ -72,11 +73,11 @@ spec:
       label:
         istio: eastwestgateway
         app: istio-eastwestgateway
-        topology.istio.io/network: southcentralus
+        topology.istio.io/network: default-region
       k8s:
         env:
         - name: ISTIO_META_REQUESTED_NETWORK_VIEW
-          value: southcentralus
+          value: default-region
         podDisruptionBudget:
           minAvailable: 1
         service:

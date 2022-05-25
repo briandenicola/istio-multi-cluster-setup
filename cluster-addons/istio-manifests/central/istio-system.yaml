@@ -1,0 +1,24 @@
+---
+apiVersion: install.istio.io/v1alpha1
+kind: IstioOperator
+metadata:
+  namespace: istio-system
+  name: istio-controlplane
+spec:
+  values:
+    global:
+      multiCluster:
+        clusterName: g6258cus
+      network: centralus
+  components:
+    ingressGateways:
+    - name: istio-ingressgateway
+      label:
+        aadpodidbinding: g6258cus-istio-pod-identity
+    - name: istio-eastwestgateway
+      label:
+        topology.istio.io/network: centralus
+      k8s:
+        env:
+        - name: ISTIO_META_REQUESTED_NETWORK_VIEW
+          value: centralus

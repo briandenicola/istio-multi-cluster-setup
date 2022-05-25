@@ -8,7 +8,7 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./istio-manifests/region/
+  path: ./cluster-addons/istio-manifests/region
   prune: true
   validation: client
   healthChecks:
@@ -29,7 +29,7 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./istio-manifests/region/gateway
+  path: ./cluster-addons/istio-gateways/region
   prune: true
   validation: client
   healthChecks:
