@@ -40,6 +40,43 @@ spec:
       k8s:
         podDisruptionBudget:
           minAvailable: 1
+        env:
+        - name: ENABLE_CA_SERVER
+          value: "false"
+        overlays:
+        - apiVersion: apps/v1
+          kind: Deployment
+          name: istiod
+          patches:
+          - path: spec.template.spec.containers.[name:discovery].args[-1]
+            value: "--tlsCertFile=/etc/cert-manager/tls/tls.crt"
+          - path: spec.template.spec.containers.[name:discovery].args[-1]
+            value: "--tlsKeyFile=/etc/cert-manager/tls/tls.key"
+          - path: spec.template.spec.containers.[name:discovery].args[-1]
+            value: "--caCertFile=/etc/cert-manager/ca/root-cert.pem"
+
+          - path: spec.template.spec.containers.[name:discovery].volumeMounts[-1]
+            value:
+              name: cert-manager
+              mountPath: "/etc/cert-manager/tls"
+              readOnly: true
+          - path: spec.template.spec.containers.[name:discovery].volumeMounts[-1]
+            value:
+              name: ca-root-cert
+              mountPath: "/etc/cert-manager/ca"
+              readOnly: true
+
+          - path: spec.template.spec.volumes[-1]
+            value:
+              name: cert-manager
+              secret:
+                secretName: istiod-tls
+          - path: spec.template.spec.volumes[-1]
+            value:
+              name: ca-root-cert
+              configMap:
+                defaultMode: 420
+                name: istio-ca-root-cert
     egressGateways:
     - name: istio-egressgateway
       namespace: istio-system

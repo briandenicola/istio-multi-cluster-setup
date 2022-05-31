@@ -1,0 +1,23 @@
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: istio-csr
+  namespace: cert-manager
+spec:
+  interval: 5m
+  chart:
+    spec:
+      chart: cert-manager-istio-csr
+      version: 'v0.4.0'
+      sourceRef:
+        kind: HelmRepository
+        name: jetstack
+        namespace: flux-system
+      interval: 1m
+  values:
+    app.tls.rootCAFile: "/var/run/secrets/istio-csr/ca.pem"
+    volumeMounts[0].name: "root-ca" 
+    volumeMounts[0].mountPath: "/var/run/secrets/istio-csr"
+    volumes[0].name: "root-ca"
+    volumes[0].secret.secretName: "istio-root-ca"
