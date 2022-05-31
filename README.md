@@ -24,19 +24,10 @@ terraform plan -out="${CLUSTER_NAME}.plan" -var "cluster_name=${CLUSTER_NAME}" -
 terraform apply -auto-approve ${CLUSTER_NAME}.plan
 ```
 
-## Get Credential File - South Central
+## Apply Kustomize to cluster - South Central
 ```bash
 az aks get-credentials -g ${CLUSTER_RG} -n ${CLUSTER_NAME} --overwrite-existing
 kubelogin convert-kubeconfig -l msi
-```
-
-## Setup Istio Trusted CA Store - South Central
-```bash
-echo TBD
-```
-
-## Apply Kustomize to cluster - South Central
-```bash
 cd cluster-manifests
 kubectl --context="${CLUSTER_NAME}" --apply --kustomize ./southcentral
 ```
@@ -56,19 +47,10 @@ terraform plan -out="${CLUSTER_NAME}.plan" -var "cluster_name=${CLUSTER_NAME}" -
 terraform apply -auto-approve ${CLUSTER_NAME}.plan
 ```
 
-## Get Credential File - Central
+## Apply Kustomize to cluster - South Central
 ```bash
 az aks get-credentials -g ${CLUSTER_RG} -n ${CLUSTER_NAME} --overwrite-existing
 kubelogin convert-kubeconfig -l msi
-```
-
-## Setup Istio Trusted CA Store - South Central
-```bash
-echo TBD
-```
-
-## Apply Kustomize to cluster - South Central
-```bash
 cd cluster-manifests
 kubectl --context="${CLUSTER_NAME}" --apply --kustomize ./central
 ```
