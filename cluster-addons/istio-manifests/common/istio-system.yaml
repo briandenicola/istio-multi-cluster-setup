@@ -23,6 +23,7 @@ metadata:
 spec:
   profile: default
   meshConfig:
+    trustDomain: cluster.local
     accessLogFile: /dev/stdout
     accessLogEncoding: JSON
     enableTracing: true
@@ -35,6 +36,7 @@ spec:
       multiCluster:
         clusterName: default-cluster-name
       network: default-region
+      caAddress: cert-manager-istio-csr.cert-manager.svc:443
   components:
     pilot:
       k8s:
