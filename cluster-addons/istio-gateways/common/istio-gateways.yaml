@@ -16,31 +16,6 @@ spec:
       hosts:
         - "*.local"
 ---
-apiVersion: secrets-store.csi.x-k8s.io/v1
-kind: SecretProviderClass
-metadata:
-  name: istio-tls
-  namespace: default
-spec:
-  provider: azure
-  secretObjects:                               
-  - secretName: istio-ingress-tls
-    type: kubernetes.io/tls
-    data: 
-    - objectName: wildcard-bjdazure-tech
-      key: tls.key
-    - objectName: wildcard-bjdazure-tech
-      key: tls.crt
-  parameters:
-    usePodIdentity: "true"                                        
-    keyvaultName: default-keyvault                                            
-    objects:  |
-      array:
-        - |
-          objectName: wildcard-bjdazure-tech
-          objectType: secret
-    tenantId: 72f988bf-86f1-41af-91ab-2d7cd011db47
----
 apiVersion: networking.istio.io/v1alpha3
 kind: Gateway
 metadata:
@@ -62,15 +37,6 @@ spec:
       protocol: HTTP
     hosts:
     - "*.knative.bjdazure.tech"
-  - port:
-      number: 443
-      name: https
-      protocol: HTTPS
-    tls:
-      mode: SIMPLE
-      credentialName: istio-ingress-tls
-    hosts:
-    - "*.bjdazure.tech"
 ---
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService

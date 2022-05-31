@@ -29,19 +29,12 @@ spec:
     enablePrometheusMerge: true
     outboundTrafficPolicy:
       mode: ALLOW_ANY
-    defaultConfig:
-      tracing:
-        zipkin:
-          address: otel-collector.default.svc.cluster.local:9411
   values:
     global:
       meshID: examplemesh
       multiCluster:
         clusterName: default-cluster-name
       network: default-region
-      tracer:
-        zipkin:
-          address: otel-collector.default.svc.cluster.local:9411
   components:
     pilot:
       k8s:

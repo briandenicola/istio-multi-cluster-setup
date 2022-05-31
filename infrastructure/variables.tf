@@ -81,14 +81,3 @@ variable "service_mesh_type" {
   default     = "istio"
   description = "The type of Service Mesh to install onto the cluster"
 }
-
-variable "certificate_name" {
-  description = "The name of the certificate to use for TLS"
-}
-
-variable "certificate_base64_encoded" {
-  description = "The name of the certificate to use for TLS"
-}
-variable "certificate_password" {
-  description = "The password for the certificate"
-}

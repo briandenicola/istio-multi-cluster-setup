@@ -1,18 +1,3 @@
-apiVersion: kustomize.toolkit.fluxcd.io/v1beta1
-kind: Kustomization
-metadata:
-  name: keda
-  namespace: flux-system
-spec:
-  interval: 10m0s
-  dependsOn:
-    - name: istio-system
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-  path: ./cluster-addons/components/keda
-  prune: true
-  validation: client
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1beta1
 kind: Kustomization
@@ -27,22 +12,6 @@ spec:
     kind: GitRepository
     name: flux-system
   path: ./cluster-addons/components/knative
-  prune: true
-  validation: client
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1beta1
-kind: Kustomization
-metadata:
-  name: dapr
-  namespace: flux-system
-spec:
-  interval: 10m0s
-  dependsOn:
-    - name: istio-system
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-  path: ./cluster-addons/components/dapr
   prune: true
   validation: client
 ---
