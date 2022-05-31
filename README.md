@@ -2,6 +2,16 @@
 
 This repo is to automate the setup of a Multi-primary Istio Mesh of two AKS clusters
 
+_The code in this repo is non-funcational at the moment. I still need to figure out the best method to automate the integration of a supported external Certificate Authority to issue trusted root and intermediate cerificates._
+
+## Backlog Status
+- [x] Cluster Creation 
+- [x] Cluster Addons 
+- [-] Certificate Issuer Configuration
+- [ ] Istio Configuration and Validation
+- [x] Istio Remote Secret Configuration 
+- [ ] End to end Validation
+
 # Prerequisites
 1. Azure Subscription
 1. Terraform 
