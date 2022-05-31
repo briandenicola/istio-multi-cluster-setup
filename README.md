@@ -5,6 +5,8 @@ This repo is to automate the setup of a Multi-primary Istio Mesh of two AKS clus
 # Prerequisites
 1. Azure Subscription
 1. Terraform 
+1. kubectl
+1. istioctl
 1. [Environmental Setup](https://github.com/briandenicola/kubernetes-cluster-setup/blob/master/Deployment.md#required-existing-resources-and-configuration)
 1.  Certificate Authority 
 
@@ -57,14 +59,13 @@ kubectl --context="${CLUSTER_NAME}" --apply --kustomize ./central
 
 ## Setup Istio Remote Secrets
 ```bash
-export PRIMARY_SUBSCRIPTION_ID=${AAD_SUBSCRIPTION_GUID}
 export PRIMARY_CLUSTER_NAME=a212scus
 export PRIMARY_CLUSTER_RG=DevSub02_K8S_a212scus_RG
-export SECONDARY_SUBSCRIPTION_ID=${AAD_SUBSCRIPTION_GUID}
-export SECONDARY_CLUSTER_NAME=${g6258cus}
-export SECONDARY_CLUSTER_RG=${DevSub02_K8S_g6258cus_RG}
+export SECONDARY_CLUSTER_NAME=g6258cus
+export SECONDARY_CLUSTER_RG=DevSub02_K8S_g6258cus_RG
 
-bash ./istio-create-remote-secrets.sh
+istioctl x create-remote-secret --context="${PRIMARY_CLUSTER_NAME}" --name="${PRIMARY_CLUSTER_NAME}" | kubectl --context="${SECONDARY_CLUSTER_NAME}" apply -f - 
+istioctl x create-remote-secret --context="${SECONDARY_CLUSTER_NAME}" --name="${SECONDARY_CLUSTER_NAME}" | kubectl --context="${PRIMARY_CLUSTER_NAME}" apply -f - 
 ```
 
 # Validate
