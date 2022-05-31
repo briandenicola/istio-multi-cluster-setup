@@ -31,8 +31,14 @@ export CLUSTER_RG=DevSub02_K8S_a212scus_RG
 export CLUSTER_NAME=a212scus
 cd ./infrastructure
 az login --identity 
-terraform init -backend=true -backend-config="tenant_id=${ARM_TENANT_ID}" -backend-config="subscription_id=${CORE_SUBSCRIPTION_ID}" -backend-config="key=${CLUSTER_NAME}.terraform.tfstate"
-terraform plan -out="${CLUSTER_NAME}.plan" -var "cluster_name=${CLUSTER_NAME}" -var "resource_group_name=${CLUSTER_RG}" -var-file="istio-southcentral.tfvars"
+terraform init -backend=true \
+  -backend-config="tenant_id=${ARM_TENANT_ID}" \
+  -backend-config="subscription_id=${CORE_SUBSCRIPTION_ID}" \
+  -backend-config="key=${CLUSTER_NAME}.terraform.tfstate"
+terraform plan -out="${CLUSTER_NAME}.plan" \
+  -var "cluster_name=${CLUSTER_NAME}" \
+  -var "resource_group_name=${CLUSTER_RG}" \
+  -var-file="istio-southcentral.tfvars"
 terraform apply -auto-approve ${CLUSTER_NAME}.plan
 ```
 
@@ -54,8 +60,15 @@ export CLUSTER_RG=DevSub02_K8S_g6258cus_RG
 export CLUSTER_NAME=g6258cus
 cd ./infrastructure
 az login --identity 
-terraform init -backend=true -backend-config="tenant_id=${ARM_TENANT_ID}" -backend-config="subscription_id=${CORE_SUBSCRIPTION_ID}" -backend-config="key=${CLUSTER_NAME}.terraform.tfstate" -reconfigure
-terraform plan -out="${CLUSTER_NAME}.plan" -var "cluster_name=${CLUSTER_NAME}" -var "resource_group_name=${CLUSTER_RG}" -var-file="istio-central.tfvars"
+terraform init -backend=true \
+  -backend-config="tenant_id=${ARM_TENANT_ID}" \
+  -backend-config="subscription_id=${CORE_SUBSCRIPTION_ID}" \
+  -backend-config="key=${CLUSTER_NAME}.terraform.tfstate" \
+  -reconfigure
+terraform plan -out="${CLUSTER_NAME}.plan" \
+  -var "cluster_name=${CLUSTER_NAME}" \
+  -var "resource_group_name=${CLUSTER_RG}" \
+  -var-file="istio-central.tfvars"
 terraform apply -auto-approve ${CLUSTER_NAME}.plan
 ```
 
