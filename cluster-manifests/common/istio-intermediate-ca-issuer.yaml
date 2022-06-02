@@ -1,0 +1,46 @@
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta1
+kind: Kustomization
+metadata:
+  name: cert-manager
+  namespace: flux-system
+spec:
+  interval: 10m0s
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./cluster-addons/components/cert-manager
+  prune: true
+  validation: client
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta1
+kind: Kustomization
+metadata:
+  name: istio-certificates
+  namespace: flux-system
+spec:
+  interval: 10m0s
+  dependsOn:
+  - name: istio-csr
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./cluster-addons/istio-certificate
+  prune: true
+  validation: client
+---
+apiVersion: kustomize.toolkit.fluxcd.io/v1beta1
+kind: Kustomization
+metadata:
+  name: istio-csr
+  namespace: flux-system
+spec:
+  interval: 10m0s
+  dependsOn:
+  - name: istio-certificates
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  path: ./cluster-addons/components/istio-csr
+  prune: true
+  validation: client
