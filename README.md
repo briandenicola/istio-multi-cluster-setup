@@ -52,6 +52,7 @@ cd cluster-manifests
 
 az aks get-credentials -g ${CLUSTER_RG} -n ${CLUSTER_NAME} --overwrite-existing
 kubelogin convert-kubeconfig -l msi
+flux install
 kubectl --context="${CLUSTER_NAME}" --apply --kustomize ./southcentral
 ```
 
@@ -79,12 +80,13 @@ terraform plan -out="${CLUSTER_NAME}.plan" \
 terraform apply -auto-approve ${CLUSTER_NAME}.plan
 ```
 
-## Apply Kustomize to cluster - South Central
+## Apply Kustomize to cluster - Central
 ```bash
 cd cluster-manifests
 
 az aks get-credentials -g ${CLUSTER_RG} -n ${CLUSTER_NAME} --overwrite-existing
 kubelogin convert-kubeconfig -l msi
+flux install
 kubectl --context="${CLUSTER_NAME}" --apply --kustomize ./central
 ```
 
