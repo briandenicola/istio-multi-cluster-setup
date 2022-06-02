@@ -32,6 +32,7 @@ export CLUSTER_RG=DevSub02_K8S_a212scus_RG
 export CLUSTER_NAME=a212scus
 
 az login --identity 
+az account set -s ${ARM_SUBSCRIPTION_ID}
 
 cd ./infrastructure
 terraform init -backend=true \
