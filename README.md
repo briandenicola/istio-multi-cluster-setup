@@ -2,7 +2,7 @@
 
 This repo is to automate the setup of a Multi-primary Istio Mesh of two AKS clusters
 
-_The code in this repo is non-funcational at the moment. I still need to figure out the best method to automate the integration of a supported external Certificate Authority to issue trusted root and intermediate cerificates._
+_The code in this repo is non-funcational at the moment. I still need to write out the steps/automation to integrate Hashicorp Cloud Vault's Certificate Authority offering with Cert-Manager istio-csr to issue intermediate cerificates._
 
 ## Backlog Status
 - [x] Cluster Creation 
