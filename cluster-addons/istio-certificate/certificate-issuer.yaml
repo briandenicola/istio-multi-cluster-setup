@@ -10,7 +10,7 @@ type: Opaque
 metadata:
   name: cert-manager-vault-approle
   namespace: istio-system
-data:
+data: #Migrate to Azure Workload Identities when supported by Vault
   secretId: OTg1MzM2YzktODY2NS00OGIzLTkyMmYtYzdiMmRlMjE5MjEzCg==
 ---
 apiVersion: cert-manager.io/v1
