@@ -17,7 +17,7 @@ _The code in this repo is non-funcational at the moment. I still need to write o
 1. Terraform 
 1. kubectl
 1. istioctl
-1. [Hashicorp Vault](./vault.md)
+1. [Hashicorp Vault](./Vault.md)
 1. [Environmental Setup](https://github.com/briandenicola/kubernetes-cluster-setup/blob/master/Deployment.md#required-existing-resources-and-configuration)
 1.  Certificate Authority 
 
