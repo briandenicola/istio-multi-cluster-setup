@@ -12,7 +12,9 @@ https://learn.hashicorp.com/tutorials/cloud/get-started-vault?in=vault/cloud
 ## Setup PKI
 https://www.vaultproject.io/docs/secrets/pki
 ### Note
-* Add CertSign as a option in the Key Usage section of the PKI Role
+* Add CertSign, CRLSign, and DataEncipherment as options in the Key Usage section of the PKI Role
+* Allow bare domains 
+* Add Issuing certificates and CRL Distribution Points URLs 
 
 ## Configure AppRole
 https://www.vaultproject.io/docs/auth/approle
