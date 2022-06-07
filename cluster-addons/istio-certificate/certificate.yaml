@@ -7,7 +7,7 @@ spec:
   isCA: true
   duration: 87600h
   secretName: cacerts
-  commonName: istio-intermediate-southcentral-ca.bjdazure.tech
+  commonName: istio-intermediate-ca.bjdazure.tech
   privateKey:
     algorithm: RSA
     size: 2048
