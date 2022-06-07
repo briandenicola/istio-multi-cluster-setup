@@ -15,9 +15,9 @@ spec:
         name: jetstack
         namespace: flux-system
       interval: 1m
-#  values:
-#    app.tls.rootCAFile: "/var/run/secrets/istio-csr/ca.pem"
-#    volumeMounts[0].name: "root-ca" 
-#    volumeMounts[0].mountPath: "/var/run/secrets/istio-csr"
-#    volumes[0].name: "root-ca"
-#    volumes[0].secret.secretName: "istio-root-ca"
+  values:
+    app.tls.rootCAFile: "/var/run/secrets/istio-csr/ca.pem"
+    volumeMounts[0].name: "intermediate-ca" 
+    volumeMounts[0].mountPath: "/var/run/secrets/istio-csr"
+    volumes[0].name: "intermediate-ca"
+    volumes[0].secret.secretName: "istio-intermediate-ca"
