@@ -10,8 +10,8 @@ type: Opaque
 metadata:
   name: cert-manager-vault-approle
   namespace: istio-system
-data: #Migrate to Azure Workload Identities when supported by Vault
-  secretId: OTg1MzM2YzktODY2NS00OGIzLTkyMmYtYzdiMmRlMjE5MjEzCg==
+data: 
+  secretId: ""
 ---
 apiVersion: cert-manager.io/v1
 kind: Issuer
@@ -20,12 +20,13 @@ metadata:
   namespace: istio-system
 spec:
   vault:
-    path: pki_int/sign/bjdazure-tech
+    path: pki/sign/bjdazure-dot-tech
+    namespace: admin
     server: https://bjdazuretech-vault.vault.f3a9ef81-a6ae-4b97-8997-f9afafd6992a.aws.hashicorp.cloud:8200
     auth:
       appRole:
         path: approle
-        roleId: "02b241f0-21e9-4527-ad67-eba84675dcb4"
+        roleId: "371544b4-0115-501c-a059-59be95f8c02c"
         secretRef:
           name: cert-manager-vault-approle
           key: secretId
