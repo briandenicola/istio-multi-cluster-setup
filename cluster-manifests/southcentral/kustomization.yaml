@@ -3,4 +3,4 @@ kind: Kustomization
 resources:
   - ../common
 patchesStrategicMerge:
-  - mesh.yaml
+  - istio-configuration.yaml

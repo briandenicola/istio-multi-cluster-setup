@@ -36,8 +36,8 @@ resource "azurerm_resource_group" "k8s" {
   name                  = var.resource_group_name
   location              = var.location
   tags     = {
-    Application = "eshopOnContainers"
-    Components  = "aks; key vault; "
+    Application = "bookstore"
+    Components  = "aks; key vault; istio; "
     DeployedOn  = timestamp()
   }
 }

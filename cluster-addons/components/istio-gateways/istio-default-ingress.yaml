@@ -18,7 +18,6 @@ spec:
     metadata:
       labels:
         app: istio-gw-ingress
-        aadpodidbinding: default-pod-identity 
     spec:
       containers:
       - name: istio-gw-ingress
@@ -32,17 +31,6 @@ spec:
           limits:
             memory: "128Mi"
             cpu: "500m"
-        volumeMounts:
-        - name: tls-mount
-          mountPath: "/mnt/secrets-store"
-          readOnly: true
-      volumes:
-      - name: tls-mount
-        csi:
-          driver: secrets-store.csi.k8s.io
-          readOnly: true
-          volumeAttributes:
-            secretProviderClass: "istio-tls"
 ---
 apiVersion: v1
 kind: Service

@@ -12,9 +12,6 @@ spec:
       network: centralus
   components:
     ingressGateways:
-    - name: istio-ingressgateway
-      label:
-        aadpodidbinding: g6258cus-istio-pod-identity
     - name: istio-eastwestgateway
       label:
         topology.istio.io/network: centralus

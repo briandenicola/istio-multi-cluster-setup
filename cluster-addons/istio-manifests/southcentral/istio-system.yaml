@@ -12,9 +12,6 @@ spec:
       network: southcentralus
   components:
     ingressGateways:
-    - name: istio-ingressgateway
-      label:
-        aadpodidbinding: a212scus-istio-pod-identity
     - name: istio-eastwestgateway
       label:
         topology.istio.io/network: southcentralus
