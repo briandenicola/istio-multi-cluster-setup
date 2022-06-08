@@ -36,7 +36,7 @@ spec:
       multiCluster:
         clusterName: default-cluster-name
       network: default-region
-      caAddress: cert-manager-istio-csr.cert-manager.svc:443
+      caAddress: cert-manager-istio-csr.istio-system.svc:443
   components:
     pilot:
       k8s:

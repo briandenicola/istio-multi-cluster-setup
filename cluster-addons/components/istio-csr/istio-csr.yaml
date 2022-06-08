@@ -1,9 +1,8 @@
----
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
   name: istio-csr
-  namespace: cert-manager
+  namespace: istio-system
 spec:
   interval: 5m
   chart:
@@ -18,6 +17,8 @@ spec:
   values:
     app:
       tls:
+        certificateDNSNames: 
+        - cert-manager-istio-csr.istio-system.svc
         rootCAFile: "/var/run/secrets/istio-csr/ca.crt"
       certmanager:
         issuer:
