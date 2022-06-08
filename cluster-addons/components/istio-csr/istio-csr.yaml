@@ -3,7 +3,7 @@ apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
   name: istio-csr
-  namespace: cert-manager
+  namespace: istio-system
 spec:
   interval: 5m
   chart:
@@ -16,8 +16,17 @@ spec:
         namespace: flux-system
       interval: 1m
   values:
-    app.tls.rootCAFile: "/var/run/secrets/istio-csr/ca.pem"
-    volumeMounts[0].name: "intermediate-ca" 
-    volumeMounts[0].mountPath: "/var/run/secrets/istio-csr"
-    volumes[0].name: "intermediate-ca"
-    volumes[0].secret.secretName: "istio-intermediate-ca"
+    app:
+      tls:
+        rootCAFile: "/var/run/secrets/istio-csr/ca.crt"
+      certmanager:
+        issuer:
+          name: "vault-issuer"
+    volumeMounts:
+    - name: "root-ca"
+      mountPath: "/var/run/secrets/istio-csr"
+      readOnly: true
+    volumes:
+    - name: "root-ca"
+      secret:
+        secretName: "istio-intermediate-ca"
