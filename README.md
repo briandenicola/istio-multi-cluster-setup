@@ -8,7 +8,7 @@ _The code in this repo is non-funcational at the moment. I still need to write o
 - [x] Cluster Creation 
 - [x] Cluster Addons 
 - [x] Certificate Issuer Configuration
-- [ ] Istio CSR Configuration
+- [x] Istio CSR Configuration
 - [ ] Istio Configuration and Validation
 - [x] Istio Remote Secret Configuration 
 - [ ] End to end Validation
