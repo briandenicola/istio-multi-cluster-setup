@@ -27,11 +27,11 @@
         allow_subdomains                   true                                                                                         
         allow_token_displayname            false                                                                                        
         allow_wildcard_certificates        true                                                                                         
-        allowed_domains                    ["bjdazure.tech", "cluster.local"]
+        allowed_domains                    ["bjdazure.tech", "cluster.local", "cert-manager-istio-csr.cert-manager.svc"]
         allowed_domains_template           false                                                                                        
         allowed_other_sans                 []                                                                                           
         allowed_serial_numbers             []                                                                                           
-        allowed_uri_sans                   []                                                                                           
+        allowed_uri_sans                   ["cert-manager-istio-csr.cert-manager.svc"]                                                                                           
         allowed_uri_sans_template          false                                                                                        
         basic_constraints_valid_for_non_ca false                                                                                        
         client_flag                        true                                                                                         
