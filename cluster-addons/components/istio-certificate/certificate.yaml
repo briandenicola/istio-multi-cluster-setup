@@ -7,16 +7,20 @@ spec:
   isCA: true
   duration: 87600h
   secretName: istio-intermediate-ca
-  commonName: istio-intermediate-ca.bjdazure.tech
+  commonName: istiod.bjdazure.tech
   privateKey:
     algorithm: RSA
     size: 2048
   usages:
     - cert sign
+  dnsNames:
+    - istiod.bjdazure.tech
+    - istiod.istio-system.svc
   subject:
     organizations:
     - bjdazure.tech
     - cluster.local
+    - istio-system.svc
     - cert-manager
   issuerRef:
     name: vault-issuer
