@@ -46,7 +46,7 @@
         key_type                           rsa                                                                                                                    
         key_usage                          ["DigitalSignature","KeyAgreement","KeyEncipherment","CertSign","CRLSign","DataEncipherment"]                          
         locality                           []                                                                                                                     
-        max_ttl                            259200                                                                                                                 
+        max_ttl                            2592000                                                                                                                 
         no_store                           false                                                                                                                  
         not_after                                                                                                                                                 
         not_before_duration                30                                                                                                                     
