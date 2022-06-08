@@ -1,23 +1,17 @@
----
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: istio-system
----
 apiVersion: v1
 kind: Secret
 type: Opaque
 metadata:
   name: cert-manager-vault-approle
-  namespace: istio-system
+  namespace: cert-manager
 data: 
-  secretId: ""
+  secretId: "YjYxMTA3MDEtZTAxNS01ZjNkLTFiNDMtMjhmYzg0YjYyODZhCg=="
 ---
 apiVersion: cert-manager.io/v1
 kind: Issuer
 metadata:
   name: vault-issuer
-  namespace: istio-system
+  namespace: cert-manager
 spec:
   vault:
     path: pki/sign/bjdazure-dot-tech
