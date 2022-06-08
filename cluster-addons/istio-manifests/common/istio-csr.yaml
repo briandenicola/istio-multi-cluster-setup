@@ -16,6 +16,8 @@ spec:
       interval: 1m
   values:
     app:
+      server:
+        clusterID: default-cluster-name
       tls:
         certificateDNSNames: 
         - cert-manager-istio-csr.istio-system.svc
