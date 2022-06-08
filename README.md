@@ -54,8 +54,7 @@ cd cluster-manifests
 
 az aks get-credentials -g ${CLUSTER_RG} -n ${CLUSTER_NAME} --overwrite-existing
 kubelogin convert-kubeconfig -l msi
-flux install
-kubectl --context="${CLUSTER_NAME}" --apply --kustomize ./southcentral
+flux bootstrap github --owner=${GITHUB_ACCOUNT} --repository=${GITHUB_REPO} --path=./cluster-manifests/central --branch=main  --personal=true --private=false
 ```
 
 ## Deploy Central Cluster
@@ -66,6 +65,9 @@ export ARM_SUBSCRIPTION_ID=${AAD_SUBSCRIPTION_GUID}
 export CORE_SUBSCRIPTION_ID=${AAD_CORE_SUBSCRIPTION_GUID}
 export CLUSTER_RG=DevSub02_K8S_g6258cus_RG
 export CLUSTER_NAME=g6258cus
+export GITHUB_ACCOUNT=${YOUR GITHUB REPO}
+export GITHUB_REPO=istio-multi-primary-setup
+export GITHUB_TOKEN=${CREATE PAT TOKEN IN YOUR GITHUB REPO}
 
 az login --identity 
 
@@ -88,8 +90,7 @@ cd cluster-manifests
 
 az aks get-credentials -g ${CLUSTER_RG} -n ${CLUSTER_NAME} --overwrite-existing
 kubelogin convert-kubeconfig -l msi
-flux install
-kubectl --context="${CLUSTER_NAME}" --apply --kustomize ./central
+flux bootstrap github --owner=${GITHUB_ACCOUNT} --repository=${GITHUB_REPO} --path=./cluster-manifests/central --branch=main  --personal=true --private=false
 ```
 
 ## Setup Istio Remote Secrets
