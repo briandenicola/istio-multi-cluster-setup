@@ -31,6 +31,6 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./cluster-addons/istio-gateways/region
+  path: ./cluster-addons/istio-gateways
   prune: true
   validation: client

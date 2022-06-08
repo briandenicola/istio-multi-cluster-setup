@@ -5,11 +5,3 @@ metadata:
   namespace: flux-system
 spec:
   path: ./cluster-addons/istio-manifests/central
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1beta1
-kind: Kustomization
-metadata:
-  name: istio-gateway
-  namespace: flux-system
-spec:
-  path: ./cluster-addons/istio-gateways/central

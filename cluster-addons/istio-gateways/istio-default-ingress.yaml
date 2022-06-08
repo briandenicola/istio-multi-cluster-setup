@@ -18,7 +18,6 @@ spec:
     metadata:
       labels:
         app: istio-gw-ingress
-        aadpodidbinding: default-pod-identity 
     spec:
       containers:
       - name: istio-gw-ingress
