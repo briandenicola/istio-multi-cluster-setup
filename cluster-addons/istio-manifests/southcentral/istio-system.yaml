@@ -11,6 +11,7 @@ spec:
         clusterName: a212scus
       network: southcentralus
   components:
+    ingressGateways:
     - name: istio-eastwestgateway
       label:
         topology.istio.io/network: southcentralus
