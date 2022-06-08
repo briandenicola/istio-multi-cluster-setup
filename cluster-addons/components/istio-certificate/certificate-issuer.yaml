@@ -5,7 +5,7 @@ metadata:
   name: cert-manager-vault-approle
   namespace: cert-manager
 data: 
-  secretId: "YjYxMTA3MDEtZTAxNS01ZjNkLTFiNDMtMjhmYzg0YjYyODZhCg=="
+  secretId: ""
 ---
 apiVersion: cert-manager.io/v1
 kind: Issuer
