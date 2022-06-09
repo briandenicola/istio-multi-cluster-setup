@@ -36,4 +36,4 @@ spec:
     volumes:
     - name: "root-ca"
       secret:
-        secretName: "istio-intermediate-ca"
+        secretName: "istio-ca"

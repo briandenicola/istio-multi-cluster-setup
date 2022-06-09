@@ -57,7 +57,7 @@ spec:
             value:
               name: cert-manager
               secret:
-                secretName: istio-intermediate-ca
+                secretName: istio-ca
 
           - path: spec.template.spec.volumes[-1]
             value:

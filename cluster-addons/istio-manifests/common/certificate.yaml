@@ -1,12 +1,12 @@
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: istio-intermediate-ca
+  name: istio-ca
   namespace: istio-system
 spec:
   isCA: true
   duration: 87600h
-  secretName: istio-intermediate-ca
+  secretName: istio-ca
   commonName: istiod.bjdazure.tech
   privateKey:
     algorithm: RSA
