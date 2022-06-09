@@ -16,57 +16,19 @@
 ```
     vault secrets enable pki
     vault secrets tune -max-lease-ttl=8760h pki
-    vault write pki/root/generate/internal common_name=bjdazure-dot-tech ttl=8760h
-    vault read pki/roles/bjdazure-dot-tech
-        Key                                Value                                                                                                                  
-        allow_any_name                     true                                                                                                                   
-        allow_bare_domains                 true                                                                                                                   
-        allow_glob_domains                 true                                                                                                                   
-        allow_ip_sans                      true                                                                                                                   
-        allow_localhost                    true                                                                                                                   
-        allow_subdomains                   true                                                                                                                   
-        allow_token_displayname            false                                                                                                                  
-        allow_wildcard_certificates        true                                                                                                                   
-        allowed_domains                    ["bjdazure.tech","cluster.local","istio-system.svc","svc.cluster.local"]                                               
-        allowed_domains_template           false                                                                                                                  
-        allowed_other_sans                 []                                                                                                                     
-        allowed_serial_numbers             []                                                                                                                     
-        allowed_uri_sans                   ["cluster.local","istiod.istio-system.svc","istio-system.svc.cluster.local","spiffe://cluster.local/ns/*"]
-        allowed_uri_sans_template          true                                                                                                                   
-        basic_constraints_valid_for_non_ca false                                                                                                                  
-        client_flag                        true                                                                                                                   
-        code_signing_flag                  false                                                                                                                  
-        country                            []                                                                                                                     
-        email_protection_flag              false                                                                                                                  
-        enforce_hostnames                  true                                                                                                                   
-        ext_key_usage                      []                                                                                                                     
-        ext_key_usage_oids                 []                                                                                                                     
-        generate_lease                     false                                                                                                                  
-        key_bits                           2048                                                                                                                   
-        key_type                           rsa                                                                                                                    
-        key_usage                          ["DigitalSignature","KeyAgreement","KeyEncipherment","CertSign","CRLSign","DataEncipherment"]                          
-        locality                           []                                                                                                                     
-        max_ttl                            2592000                                                                                                                 
-        no_store                           false                                                                                                                  
-        not_after                                                                                                                                                 
-        not_before_duration                30                                                                                                                     
-        organization                       []                                                                                                                     
-        ou                                 []                                                                                                                     
-        policy_identifiers                 []                                                                                                                     
-        postal_code                        []                                                                                                                     
-        province                           []                                                                                                                     
-        require_cn                         false                                                                                                                  
-        server_flag                        true                                                                                                                   
-        signature_bits                     256                                                                                                                    
-        street_address                     []                                                                                                                     
-        ttl                                0                                                                                                                      
-        use_csr_common_name                true                                                                                                                   
-        use_csr_sans                       true                                                                                           
-    vault read pki/config/urls
-        Key                     Value                                                                                                        
-        crl_distribution_points ["https://bjdazuretech.vault.77efcb74-6489-4e26-8333-65c5886cee01.aws.hashicorp.cloud:8200/v1/pki/crl"]
-        issuing_certificates    ["https://bjdazuretech.vault.77efcb74-6489-4e26-8333-65c5886cee01.aws.hashicorp.cloud:8200/v1/pki/ca"] 
-        ocsp_servers            []   
+    vault write -field=certificate pki/root/generate/internal common_name=bjdazure-dot-tech ttl=8760h
+    vault write pki/roles/bjdazure-dot-tech \
+        allowed_domains="bjdazure.tech","cluster.local","svc" \
+        allow_subdomains=true \
+        allow_bare_domains=true \
+        allowed_uri_sans="cluster.local","istiod.istio-system.svc","istio-system.svc.cluster.local","spiffe://cluster.local/*" \
+        require_cn=false \
+        key_type=rsa \                         
+        key_usage="DigitalSignature","KeyAgreement","KeyEncipherment","CertSign","CRLSign","DataEncipherment" \  
+        max_ttl="8766h"
+    vault write pki/config/urls                                                                                                      
+        issuing_certificates="https://bjdazuretech.vault.77efcb74-6489-4e26-8333-65c5886cee01.aws.hashicorp.cloud:8200/v1/pki/crl" \
+        crl_distribution_points="https://bjdazuretech.vault.77efcb74-6489-4e26-8333-65c5886cee01.aws.hashicorp.cloud:8200/v1/pki/ca"
 ```
 
 ### Reference
