@@ -31,7 +31,7 @@
         allowed_domains_template           false                                                                                                                  
         allowed_other_sans                 []                                                                                                                     
         allowed_serial_numbers             []                                                                                                                     
-        allowed_uri_sans                   ["cluster.local","istiod.istio-system.svc","istio-system.svc.cluster.local","spiffe://cluster.local/ns/istio-system/*"]
+        allowed_uri_sans                   ["cluster.local","istiod.istio-system.svc","istio-system.svc.cluster.local","spiffe://cluster.local/ns/*"]
         allowed_uri_sans_template          true                                                                                                                   
         basic_constraints_valid_for_non_ca false                                                                                                                  
         client_flag                        true                                                                                                                   
