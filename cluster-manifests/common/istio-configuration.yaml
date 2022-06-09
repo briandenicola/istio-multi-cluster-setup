@@ -6,7 +6,7 @@ metadata:
 spec:
   interval: 10m0s
   dependsOn:
-  - name: istio-certificates
+  - name: cert-manager
   sourceRef:
     kind: GitRepository
     name: flux-system
@@ -18,19 +18,3 @@ spec:
       kind: Deployment
       name: istiod
       namespace: istio-system
----
-apiVersion: kustomize.toolkit.fluxcd.io/v1beta1
-kind: Kustomization
-metadata:
-  name: istio-gateway
-  namespace: flux-system
-spec:
-  dependsOn:
-    - name: istio-system
-  interval: 10m0s
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
-  path: ./cluster-addons/components/istio-gateways
-  prune: true
-  validation: client

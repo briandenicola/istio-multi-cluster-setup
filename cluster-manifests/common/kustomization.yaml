@@ -3,6 +3,5 @@ kind: Kustomization
 resources:
   - cluster-addons.yaml
   - istio-operator-crd.yaml
-  - istio-ca-issuer.yaml
   - istio-configuration.yaml
   - apps.yaml
