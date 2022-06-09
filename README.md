@@ -1,25 +1,6 @@
 # Introduction 
 
-This repo is to automate the setup of a Multi-primary Istio Mesh of two AKS clusters
-
-_The code in this repo is non-funcational at the moment. Fails when starting pod with istio injected:_
-```
-Error: Failed to parse and verify signed certificate chain from issuer
-Details:
-  Failed to verify the issued certificate chain against the current mesh roots: x509:\
-  Certificate has expired or is not yet valid: current time 2022-06-09T01:15:13Z is before 2022-06-09T01:15:17Z
-Identities: spiffe://cluster.local/ns/istio-system/sa/istio-ingressgateway-service-account
-```
-
-## Backlog Status
-- [x] Cluster Creation 
-- [x] Cluster Addons 
-- [x] Certificate Issuer Configuration
-- [x] Istio CSR Configuration
-- [x] Istio Configuration
-- [ ] Istio Validation 
-- [x] Istio Remote Secret Configuration 
-- [ ] End to end Validation
+This repo is to automate the setup of a Multi-primary Istio Mesh of two AKS clusters using Hashicorp Vault or using [Self Signed](https://github.com/briandenicola/istio-multi-primary-setup/tree/self-signed) Certificates
 
 # Prerequisites
 1. Azure Subscription
