@@ -4,3 +4,4 @@ resources:
   - ../common
 patchesStrategicMerge:
   - istio-configuration.yaml
+  - apps.yaml

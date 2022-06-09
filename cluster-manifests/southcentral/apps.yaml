@@ -5,12 +5,5 @@ metadata:
   name: os-checker
   namespace: flux-system
 spec:
-  interval: 30m0s
-  dependsOn:
-  - name: istio-system
-  sourceRef:
-    kind: GitRepository
-    name: flux-system
   path: ./apps/os-checker/v1
-  prune: true
-  validation: client
+
