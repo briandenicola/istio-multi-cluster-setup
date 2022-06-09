@@ -2,17 +2,24 @@
 
 This repo is to automate the setup of a Multi-primary Istio Mesh of two AKS clusters
 
-_The code in this repo is non-funcational at the moment. I still need to write out the steps/automation to integrate Hashicorp Cloud Vault's Certificate Authority offering with Cert-Manager istio-csr to issue intermediate cerificates._
+_The code in this repo is non-funcational at the moment. Fails when starting pod with istio injected:_
+```
+Error: Failed to parse and verify signed certificate chain from issuer
+Details:
+  Failed to verify the issued certificate chain against the current mesh roots: x509:\
+  Certificate has expired or is not yet valid: current time 2022-06-09T01:15:13Z is before 2022-06-09T01:15:17Z
+Identities: spiffe://cluster.local/ns/istio-system/sa/istio-ingressgateway-service-account
+```
 
 ## Backlog Status
 - [x] Cluster Creation 
 - [x] Cluster Addons 
 - [x] Certificate Issuer Configuration
 - [x] Istio CSR Configuration
-- [ ] Istio Configuration and Validation
+- [x] Istio Configuration
+- [ ] Istio Validation 
 - [x] Istio Remote Secret Configuration 
 - [ ] End to end Validation
-- [ ] Certmanager + KeyVault + AAD Pod Identity/CSI Driver
 
 # Prerequisites
 1. Azure Subscription
@@ -20,8 +27,8 @@ _The code in this repo is non-funcational at the moment. I still need to write o
 1. kubectl
 1. istioctl
 1. [Hashicorp Vault](./Vault.md)
-1. [Environmental Setup](https://github.com/briandenicola/kubernetes-cluster-setup/blob/master/Deployment.md#required-existing-resources-and-configuration)
-1.  Certificate Authority 
+1. [Environmental Setup](./Environment.md)
+1. Certificate Authority 
 
 # Cluster Setup
 ## Deploy South Central Cluster
@@ -32,6 +39,9 @@ export ARM_SUBSCRIPTION_ID=${AAD_SUBSCRIPTION_GUID}
 export CORE_SUBSCRIPTION_ID=${AAD_CORE_SUBSCRIPTION_GUID}
 export CLUSTER_RG=DevSub02_K8S_a212scus_RG
 export CLUSTER_NAME=a212scus
+export GITHUB_ACCOUNT=${YOUR GITHUB REPO}
+export GITHUB_REPO=istio-multi-primary-setup
+export GITHUB_TOKEN=${CREATE PAT TOKEN IN YOUR GITHUB REPO}
 
 az login --identity 
 az account set -s ${ARM_SUBSCRIPTION_ID}
