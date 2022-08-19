@@ -47,7 +47,7 @@ variable "load_balancer_sku" {
 }
 
 variable "core_subscription" {
-  default     = "2deb88fe-eca8-499a-adb9-6e0ea8b6c1d2"
+  default     = "ccfc5dda-43af-4b5e-8cc2-1dda18f2382e"
   description = "The subscription where Azure Container Repo lives"
 }
 
@@ -57,7 +57,7 @@ variable "acr_resource_group" {
 }
 
 variable "acr_name" {
-  default     = "bjd145"
+  default     = "bjdcsa"
   description = "The Azure Container Repo name"
 }
 

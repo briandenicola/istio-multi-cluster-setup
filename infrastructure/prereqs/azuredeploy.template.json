@@ -27,7 +27,7 @@
             "type": "String"
         },
         "virtual_network_name": {
-            "defaultValue": "DevSub02-Vnet-Sandbox-001",
+            "defaultValue": "DevSub02-Vnet-001",
             "type": "String"
         },
         "location": {
@@ -474,9 +474,8 @@
                                 "fqdnTags": [],
                                 "webCategories": [],
                                 "targetFqdns": [
-                                    "bjd145.azurecr.io",
-                                    "bjd145.centralus.data.azurecr.io",
-                                    "bjd145.centralus.data.azurecr.io"
+                                    "bjdcsa.azurecr.io",
+                                    "bjdcsa.southcentralus.data.azurecr.io"
                                 ],
                                 "targetUrls": [],
                                 "terminateTLS": false,
