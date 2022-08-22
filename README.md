@@ -7,6 +7,7 @@ This repo is to automate the setup of a Multi-primary Istio Mesh of two AKS clus
 1. Terraform 
 1. kubectl
 1. istioctl
+1. flux cli
 1. [Hashicorp Vault](./Vault.md)
 1. [Environmental Setup](./Environment.md)
 1. Certificate Authority 
@@ -15,10 +16,11 @@ This repo is to automate the setup of a Multi-primary Istio Mesh of two AKS clus
 ## Deploy South Central Cluster
 ```bash
 export ARM_USE_MSI=true 
+export ARM_CLIENT_ID=${AAD_CLIENT_GUID}
 export ARM_TENANT_ID=${AAD_TENANT_GUID}
 export ARM_SUBSCRIPTION_ID=${AAD_SUBSCRIPTION_GUID}
 export CORE_SUBSCRIPTION_ID=${AAD_CORE_SUBSCRIPTION_GUID}
-export CLUSTER_RG=DevSub02_K8S_a212scus_RG
+export CLUSTER_RG=Apps02_K8S_a212scus_RG
 export CLUSTER_NAME=a212scus
 export GITHUB_ACCOUNT=${YOUR GITHUB REPO}
 export GITHUB_REPO=istio-multi-primary-setup
@@ -39,22 +41,23 @@ terraform plan -out="${CLUSTER_NAME}.plan" \
 terraform apply -auto-approve ${CLUSTER_NAME}.plan
 ```
 
-## Apply Kustomize to cluster - South Central
+## Boostrap Flux - South Central
 ```bash
 cd cluster-manifests
 
 az aks get-credentials -g ${CLUSTER_RG} -n ${CLUSTER_NAME} --overwrite-existing
 kubelogin convert-kubeconfig -l msi
-flux bootstrap github --owner=${GITHUB_ACCOUNT} --repository=${GITHUB_REPO} --path=./cluster-manifests/central --branch=main  --personal=true --private=false
+flux bootstrap github --owner=${GITHUB_ACCOUNT} --repository=${GITHUB_REPO} --path=./cluster-manifests/southcentral --branch=main  --personal=true --private=false
 ```
 
 ## Deploy Central Cluster
 ```bash
-export ARM_USE_MSI=true 
+export ARM_USE_MSI=true
+export ARM_CLIENT_ID=${AAD_CLIENT_GUID}
 export ARM_TENANT_ID=${AAD_TENANT_GUID}
 export ARM_SUBSCRIPTION_ID=${AAD_SUBSCRIPTION_GUID}
 export CORE_SUBSCRIPTION_ID=${AAD_CORE_SUBSCRIPTION_GUID}
-export CLUSTER_RG=DevSub02_K8S_g6258cus_RG
+export CLUSTER_RG=Apps02_K8S_g6258cus_RG
 export CLUSTER_NAME=g6258cus
 export GITHUB_ACCOUNT=${YOUR GITHUB REPO}
 export GITHUB_REPO=istio-multi-primary-setup
@@ -75,7 +78,7 @@ terraform plan -out="${CLUSTER_NAME}.plan" \
 terraform apply -auto-approve ${CLUSTER_NAME}.plan
 ```
 
-## Apply Kustomize to cluster - Central
+## Boostrap Flux - South Central
 ```bash
 cd cluster-manifests
 
@@ -87,9 +90,9 @@ flux bootstrap github --owner=${GITHUB_ACCOUNT} --repository=${GITHUB_REPO} --pa
 ## Setup Istio Remote Secrets
 ```bash
 export PRIMARY_CLUSTER_NAME=a212scus
-export PRIMARY_CLUSTER_RG=DevSub02_K8S_a212scus_RG
+export PRIMARY_CLUSTER_RG=Apps02_K8S_a212scus_RG
 export SECONDARY_CLUSTER_NAME=g6258cus
-export SECONDARY_CLUSTER_RG=DevSub02_K8S_g6258cus_RG
+export SECONDARY_CLUSTER_RG=Apps02_K8S_g6258cus_RG
 
 istioctl x create-remote-secret --context="${PRIMARY_CLUSTER_NAME}" --name="${PRIMARY_CLUSTER_NAME}" \
   | kubectl --context="${SECONDARY_CLUSTER_NAME}" apply -f - 
