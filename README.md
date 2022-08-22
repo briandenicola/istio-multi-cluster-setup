@@ -78,7 +78,7 @@ terraform plan -out="${CLUSTER_NAME}.plan" \
 terraform apply -auto-approve ${CLUSTER_NAME}.plan
 ```
 
-## Boostrap Flux - South Central
+## Boostrap Flux - Central
 ```bash
 cd cluster-manifests
 
