@@ -27,7 +27,7 @@ This repo is to automate the setup of a Multi-primary Istio Mesh of two AKS clus
 
   az aks get-credentials -g ${CENTRAL_CLUSTER_RG} -n ${CENTRAL_CLUSTER_NAME} --overwrite-existing
   kubelogin convert-kubeconfig -l azurecli
-  kubectl apply -k ./cluster-manifests/central
+  kubectl kustomize --enable-helm ./cluster-mantifests/central | kubectl apply -f -
 ```
 
 ## Boostrap Istio - South Central
@@ -36,7 +36,7 @@ This repo is to automate the setup of a Multi-primary Istio Mesh of two AKS clus
 
   az aks get-credentials -g ${SOUTH_CENTRAL_CLUSTER_RG} -n ${SOUTH_CENTRAL_CLUSTER_NAME} --overwrite-existing
   kubelogin convert-kubeconfig -l azurecli
-  kubectl apply -k ./cluster-manifests/southcentral
+  kubectl kustomize --enable-helm ./cluster-mantifests/southcentral | kubectl apply -f -
 ```
 
 ## Setup Istio Remote Secrets
