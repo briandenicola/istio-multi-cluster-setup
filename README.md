@@ -30,13 +30,13 @@ This repo is to automate the setup of a Multi-primary Istio Mesh of two AKS clus
 
 ## Peer Networks
 ```bash
-  bash ./scripts/setup-env.sh
-  bash ./scripts/peer.sh
+  source ./scripts/setup-env.sh
+  source ./scripts/peer.sh
 ```
 
 ## Boostrap Istio - Central
 ```bash
-  bash ./scripts/setup-env.sh
+  source ./scripts/setup-env.sh
 
   az aks get-credentials -g ${CENTRAL_CLUSTER_RG} -n ${CENTRAL_CLUSTER_NAME} --overwrite-existing
   kubelogin convert-kubeconfig -l azurecli
@@ -46,7 +46,7 @@ This repo is to automate the setup of a Multi-primary Istio Mesh of two AKS clus
 
 ## Boostrap Istio - South Central
 ```bash
-  bash ./scripts/setup-env.sh
+  source ./scripts/setup-env.sh
 
   az aks get-credentials -g ${SOUTH_CENTRAL_CLUSTER_RG} -n ${SOUTH_CENTRAL_CLUSTER_NAME} --overwrite-existing
   kubelogin convert-kubeconfig -l azurecli
@@ -56,7 +56,7 @@ This repo is to automate the setup of a Multi-primary Istio Mesh of two AKS clus
 
 ## Setup Istio Remote Secrets
 ```bash
-  bash ./scripts/setup-env.sh
+  source ./scripts/setup-env.sh
 
   istioctl x create-remote-secret --context="${CENTRAL_CLUSTER_NAME}" --name="${CENTRAL_CLUSTER_NAME}" \
     | kubectl --context="${SOUTH_CENTRAL_CLUSTER_NAME}" apply -f - 
