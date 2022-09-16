@@ -1,6 +1,37 @@
 #!/bin/bash
 
-if [[ -z "${appName}" ]]; then
+while (( "$#" )); do
+  case "$1" in
+    -r|--region)
+      regions+=($2)
+      shift 2
+      ;;
+    -n|--name)
+      peer_name=$2
+      shift 2
+      ;;
+    --domain)
+      domainName=$2
+      shift 2
+      ;;
+    -h|--help)
+      echo "Usage: ./peer.sh [--name]
+        --peer(n)    - A defined name for the peering. Will be auto-generated if not supplied (Optional)
+      "
+      exit 0
+      ;;
+    --) 
+      shift
+      break
+      ;;
+    -*|--*=) 
+      echo "Error: Unsupported flag $1" >&2
+      exit 1
+      ;;
+  esac
+done
+
+if [[ -z "${peer_name}" ]]; then
   peer_name=`cat /dev/urandom | tr -dc 'a-z' | fold -w 8 | head -n 1`
 fi 
 
