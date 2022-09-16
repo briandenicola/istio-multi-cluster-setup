@@ -10,10 +10,10 @@ az network vnet peering create --name ${peer_name} \
     --vnet-name ${CENTRAL_VNET_NAME} \
     --allow-vnet-access \
     --allow-forwarded-traffic 
-    
+
 az network vnet peering create --name ${peer_name} \
     --remote-vnet ${CENTRAL_VNET_ID} \
     --resource-group ${SOUTH_CENTRAL_CLUSTER_RG} \
-    --vnet-name ${SOUTH_CENTRAL_VNET_NAME}
+    --vnet-name ${SOUTH_CENTRAL_VNET_NAME} \
     --allow-vnet-access \
     --allow-forwarded-traffic 
