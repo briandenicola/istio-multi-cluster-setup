@@ -3,5 +3,5 @@ kind: Kustomization
 resources:
   - ../common
 patchesStrategicMerge:
-  - istio-configuration.yaml
-  - apps.yaml
+  - istio-csr.yaml
+  - istio-system.yaml

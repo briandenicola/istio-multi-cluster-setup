@@ -1,0 +1,22 @@
+app:
+  logLevel: 2
+  server:
+    clusterID: default-cluster-name
+    maxCertificateDuration: 168h
+  tls:
+    istiodCertificateDuration: 168h
+    certificateDuration: 24h
+    certificateDNSNames: 
+    - cert-manager-istio-csr.istio-system.svc
+    rootCAFile: "/var/run/secrets/istio-csr/ca.crt"
+  certmanager:
+    issuer:
+      name: "vault-issuer"
+volumeMounts:
+- name: "root-ca"
+  mountPath: "/var/run/secrets/istio-csr"
+  readOnly: true
+volumes:
+- name: "root-ca"
+  secret:
+    secretName: "istio-ca"

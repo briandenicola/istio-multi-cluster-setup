@@ -1,43 +1,48 @@
-terraform {
-  required_providers {
-    azurerm  = {
-      source = "hashicorp/azurerm"
-      version = "3.3.0"
-    }
-    azapi = {
-      source = "Azure/azapi"
-      version = "0.1.1"
-    }
-  }
-  backend "azurerm" {
-    resource_group_name  = "Core_Storage_RG"
-    storage_account_name = "bjdterraform003"
-    container_name       = "plans"
-  }
-}
-
-provider "azapi" {
-}
-
-provider "azurerm" {
-  features  {}
-}
-
-provider "azurerm" {
-  alias           = "core"
-  features        {}
-
-  subscription_id = var.core_subscription
-}
-
 data "azurerm_client_config" "current" {}
 
-resource "azurerm_resource_group" "k8s" {
-  name                  = var.resource_group_name
-  location              = var.location
-  tags     = {
-    Application = "bookstore"
-    Components  = "aks; key vault; istio; "
+data "http" "myip" {
+  url = "http://checkip.amazonaws.com/"
+}
+
+resource "random_id" "this" {
+  byte_length = 2
+}
+
+resource "random_pet" "this" {
+  length    = 1
+  separator = ""
+}
+
+resource "random_password" "password" {
+  length  = 25
+  special = true
+}
+
+resource "random_integer" "vnet_cidr" {
+  min = 10
+  max = 250
+}
+
+resource "random_integer" "services_cidr" {
+  min = 64
+  max = 127
+}
+
+locals {
+  resource_name   = "${random_pet.this.id}-${random_id.this.dec}"
+  aks_name        = "${local.resource_name}-aks"
+  vnet_cidr       = cidrsubnet("10.0.0.0/8", 8, random_integer.vnet_cidr.result)
+  subnet_cidir    = cidrsubnet(local.vnet_cidr, 8, 2)
+}
+
+resource "azurerm_resource_group" "this" {
+  name     = "${local.resource_name}_rg"
+  location = var.location
+
+  tags = {
+    Application = "whatos"
+    Components  = "aks; istio, ${var.location}"
     DeployedOn  = timestamp()
+    Deployer    = data.azurerm_client_config.current.object_id
   }
 }
