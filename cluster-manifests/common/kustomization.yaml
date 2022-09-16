@@ -3,8 +3,6 @@ kind: Kustomization
 
 resources:
   - istio-namespace.yaml
-  - certificate-issuer.yaml
-  - certificate.yaml
   - istio-system.yaml
   - istio-default-ingress.yaml
   - istio-gateways.yaml
