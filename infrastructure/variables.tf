@@ -7,8 +7,3 @@ variable "location" {
   default     = "southcentralus"
   description = "Azure Region"
 }
-
-variable "vnet_address" {
-  default     = "10.16"
-  description = "First two octets of the Azure virtual network"
-}
