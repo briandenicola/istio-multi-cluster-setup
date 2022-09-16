@@ -1,34 +1,36 @@
-data "azurerm_virtual_network" "vnet" {
-  name                = var.k8s_vnet
-  resource_group_name = var.k8s_vnet_resource_group_name
+resource "azurerm_virtual_network" "this" {
+  name                = "${local.resource_name}-network"
+  address_space       = ["10.25.0.0/16"]
+  location            = azurerm_resource_group.this.location
+  resource_group_name = azurerm_resource_group.this.name
 }
 
-data "azurerm_subnet" "k8s_subnet" {
-  name                 = var.k8s_subnet
-  virtual_network_name = var.k8s_vnet
-  resource_group_name  = var.k8s_vnet_resource_group_name
+resource "azurerm_subnet" "this" {
+  name                 = "servers"
+  resource_group_name  = azurerm_resource_group.this.name
+  virtual_network_name = azurerm_virtual_network.this.name
+  address_prefixes     = ["10.25.2.0/24"]
 }
 
-data "azurerm_subnet" "management_subnet" {
-  name                 = "Servers"
-  virtual_network_name = var.k8s_vnet
-  resource_group_name  = var.k8s_vnet_resource_group_name
+resource "azurerm_network_security_group" "this" {
+  name                = "${local.resource_name}-nsg"
+  location            = azurerm_resource_group.this.location
+  resource_group_name = azurerm_resource_group.this.name
+
+  security_rule {
+    name                       = "port_443"
+    priority                   = 100
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "443"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+  }
 }
 
-data "azurerm_subnet" "private_endpoint_subnet" {
-  name                 = "private-endpoints"
-  virtual_network_name = var.k8s_vnet
-  resource_group_name  = var.k8s_vnet_resource_group_name
-}
-
-data "azurerm_private_dns_zone" "aks_private_zone" {
-  name                      = "privatelink.${var.location}.azmk8s.io"
-  resource_group_name       = var.dns_resource_group_name
-  provider                  = azurerm.core
-}
-
-data "azurerm_private_dns_zone" "privatelink_vaultcore_azure_net" {
-  name                      = "privatelink.vaultcore.azure.net"
-  resource_group_name       = var.dns_resource_group_name
-  provider                  = azurerm.core
+resource "azurerm_subnet_network_security_group_association" "this" {
+  subnet_id                 = azurerm_subnet.this.id
+  network_security_group_id = azurerm_network_security_group.this.id
 }
