@@ -14,13 +14,11 @@ This repo is to automate the setup of a Multi-primary Istio Mesh of two AKS clus
 # Cluster Setup
 ## Deploy Clusters
 ```bash
-  az login --identity 
-  az account set -s ${ARM_SUBSCRIPTION_ID}
+  az login
 
   cd ./infrastructure
   terraform init
-  terraform plan -out="istio.plan" 
-  terraform apply -auto-approve istio.plan
+  terraform apply -auto-approve
 ```
 
 ## Boostrap Istio - Central
