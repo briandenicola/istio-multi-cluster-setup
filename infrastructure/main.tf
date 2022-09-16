@@ -19,19 +19,20 @@ resource "random_password" "password" {
 }
 
 locals {
-  location        = "southcentralus"
+  locations_list  = ["southcentralus", "centralus"]
+  locations       = toset(local.locations_list)
   resource_name   = "${random_pet.this.id}-${random_id.this.dec}"
   aks_name        = "${local.resource_name}-aks"
-  acr_name        = "acr${random_pet.this.id}${random_id.this.dec}"
 }
 
 resource "azurerm_resource_group" "this" {
-  name     = "${local.resource_name}_rg"
-  location = local.location
+  for_each = local.locations
+  name     = "${local.resource_name}_${each.key}_rg"
+  location = each.key
 
   tags = {
     Application = "whatos"
-    Components  = "aks; skaffold; keyvault"
+    Components  = "aks; istio, ${each.key}"
     DeployedOn  = timestamp()
     Deployer    = data.azurerm_client_config.current.object_id
   }

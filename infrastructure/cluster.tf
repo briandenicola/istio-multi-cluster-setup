@@ -1,15 +1,17 @@
 resource "azurerm_kubernetes_cluster" "this" {
+  for_each = local.locations
+
   lifecycle {
     ignore_changes = [
       default_node_pool.0.node_count,
     ]
   }
 
-  name                              = local.aks_name
-  resource_group_name               = azurerm_resource_group.this.name
-  location                          = azurerm_resource_group.this.location
-  node_resource_group               = "${local.resource_name}_k8s_nodes_rg"
-  dns_prefix                        = local.aks_name
+  name                              = "${local.aks_name}-${each.key}"
+  resource_group_name               = azurerm_resource_group.this[each.key].name
+  location                          = azurerm_resource_group.this[each.key].location
+  node_resource_group               = "${local.resource_name}_k8s_${each.key}_nodes_rg"
+  dns_prefix                        = "${local.aks_name}-${each.key}"
   sku_tier                          = "Free"
   azure_policy_enabled              = true
   api_server_authorized_ip_ranges   = ["${chomp(data.http.myip.body)}/32"]
@@ -23,13 +25,13 @@ resource "azurerm_kubernetes_cluster" "this" {
 
   identity {
     type         = "UserAssigned"
-    identity_ids = [azurerm_user_assigned_identity.aks_identity.id]
+    identity_ids = [azurerm_user_assigned_identity.aks_identity[each.key].id]
   }
 
   kubelet_identity {
-    client_id                 = azurerm_user_assigned_identity.aks_kubelet_identity.client_id
-    object_id                 = azurerm_user_assigned_identity.aks_kubelet_identity.principal_id
-    user_assigned_identity_id = azurerm_user_assigned_identity.aks_kubelet_identity.id
+    client_id                 = azurerm_user_assigned_identity.aks_kubelet_identity[each.key].client_id
+    object_id                 = azurerm_user_assigned_identity.aks_kubelet_identity[each.key].principal_id
+    user_assigned_identity_id = azurerm_user_assigned_identity.aks_kubelet_identity[each.key].id
   }
 
   default_node_pool {
@@ -37,7 +39,7 @@ resource "azurerm_kubernetes_cluster" "this" {
     node_count          = 2
     vm_size             = "Standard_DS4_v2"
     os_disk_size_gb     = 30
-    vnet_subnet_id      = azurerm_subnet.this.id
+    vnet_subnet_id      = azurerm_subnet.this[each.key].id
     type                = "VirtualMachineScaleSets"
     enable_auto_scaling = true
     min_count           = 1
@@ -54,16 +56,17 @@ resource "azurerm_kubernetes_cluster" "this" {
   }
 
   oms_agent {
-    log_analytics_workspace_id = azurerm_log_analytics_workspace.this.id
+    log_analytics_workspace_id = azurerm_log_analytics_workspace.this[each.key].id
   }
 
   microsoft_defender {
-    log_analytics_workspace_id = azurerm_log_analytics_workspace.this.id
+    log_analytics_workspace_id = azurerm_log_analytics_workspace.this[each.key].id
   }
 
 }
 
 data "azurerm_public_ip" "aks" {
-  name                = reverse(split("/", tolist(azurerm_kubernetes_cluster.this.network_profile.0.load_balancer_profile.0.effective_outbound_ips)[0]))[0]
-  resource_group_name = azurerm_kubernetes_cluster.this.node_resource_group
+  for_each            = local.locations
+  name                = reverse(split("/", tolist(azurerm_kubernetes_cluster.this[each.key].network_profile.0.load_balancer_profile.0.effective_outbound_ips)[0]))[0]
+  resource_group_name = azurerm_kubernetes_cluster.this[each.key].node_resource_group
 }
