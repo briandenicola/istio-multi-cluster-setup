@@ -34,6 +34,16 @@ This repo is to automate the setup of a Multi-primary Istio Mesh of two AKS clus
   source ./scripts/peer.sh
 ```
 
+## Istio Certificates - Central
+1. [Hashicorp Vault](./Vault.md)
+1. Setup Certificate Issuer and Certificate 
+1. Install Cert Manager Istio CSR
+
+## Istio Certificates - South Central
+1. [Hashicorp Vault](./Vault.md)
+1. Setup Certificate Issuer and Certificate 
+1. Install Cert Manager Istio CSR
+
 ## Boostrap Istio - Central
 ```bash
   source ./scripts/setup-env.sh
