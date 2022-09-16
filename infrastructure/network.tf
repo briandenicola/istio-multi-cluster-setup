@@ -40,9 +40,10 @@ resource "azurerm_subnet_network_security_group_association" "this" {
 }
 
 resource "azurerm_virtual_network_peering" "this" {
-  name                      = "300b7e8f28b6"
-  resource_group_name       = azurerm_resource_group.this[local.locations_list[0]].name
-  virtual_network_name      = azurerm_virtual_network.this[local.locations_list[0]].name
-  remote_virtual_network_id = azurerm_virtual_network.this[local.locations_list[1]].id
+  count                     = length(local.locations_list)
+  name                      = "300b7e8f28b5"
+  resource_group_name       = azurerm_resource_group.this[element(local.locations_list, count.index)].name
+  virtual_network_name      = azurerm_virtual_network.this[element(local.locations_list, count.index)].name
+  remote_virtual_network_id = azurerm_virtual_network.this[element(local.locations_list, 1 - count.index)].id
   allow_virtual_network_access = true
 }
