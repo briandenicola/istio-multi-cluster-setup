@@ -7,7 +7,6 @@ This repo is to automate the setup of a Multi-primary Istio Mesh of two AKS clus
 1. Terraform 
 1. kubectl
 1. istioctl
-1. flux cli
 1. [Hashicorp Vault](./Vault.md)
 1. Certificate Authority 
 
@@ -16,14 +15,13 @@ This repo is to automate the setup of a Multi-primary Istio Mesh of two AKS clus
 ```bash
   az login
 
-  cd ./infrastructure
-  terraform init
-  terraform apply -auto-approve
+  terraform -chdir=./infrastructure init
+  terraform -chdir=./infrastructure apply -auto-approve
 ```
 
 ## Boostrap Istio - Central
 ```bash
-  cd cluster-manifests
+  source ./scripts/setup-env.sh
 
   az aks get-credentials -g ${CENTRAL_CLUSTER_RG} -n ${CENTRAL_CLUSTER_NAME} --overwrite-existing
   kubelogin convert-kubeconfig -l azurecli
@@ -32,7 +30,7 @@ This repo is to automate the setup of a Multi-primary Istio Mesh of two AKS clus
 
 ## Boostrap Istio - South Central
 ```bash
-  cd cluster-manifests
+  source ./scripts/setup-env.sh
 
   az aks get-credentials -g ${SOUTH_CENTRAL_CLUSTER_RG} -n ${SOUTH_CENTRAL_CLUSTER_NAME} --overwrite-existing
   kubelogin convert-kubeconfig -l azurecli
@@ -41,8 +39,7 @@ This repo is to automate the setup of a Multi-primary Istio Mesh of two AKS clus
 
 ## Setup Istio Remote Secrets
 ```bash
-  export CENTRAL_CLUSTER_NAME=
-  export SOUTH_CENTRAL_CLUSTER_NAME=
+  source ./scripts/setup-env.sh
 
   istioctl x create-remote-secret --context="${CENTRAL_CLUSTER_NAME}" --name="${CENTRAL_CLUSTER_NAME}" \
     | kubectl --context="${SOUTH_CENTRAL_CLUSTER_NAME}" apply -f - 
