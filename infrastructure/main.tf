@@ -18,21 +18,30 @@ resource "random_password" "password" {
   special = true
 }
 
+resource "random_integer" "vnet_cidr" {
+  min = 10
+  max = 250
+}
+
+resource "random_integer" "services_cidr" {
+  min = 64
+  max = 127
+}
+
 locals {
-  locations_list  = ["southcentralus", "centralus"]
-  locations       = toset(local.locations_list)
   resource_name   = "${random_pet.this.id}-${random_id.this.dec}"
   aks_name        = "${local.resource_name}-aks"
+  vnet_cidr       = cidrsubnet("10.0.0.0/8", 8, random_integer.vnet_cidr.result)
+  subnet_cidir    = cidrsubnet(local.vnet_cidr, 8, 2)
 }
 
 resource "azurerm_resource_group" "this" {
-  for_each = local.locations
-  name     = "${local.resource_name}_${each.key}_rg"
-  location = each.key
+  name     = "${local.resource_name}_rg"
+  location = var.location
 
   tags = {
     Application = "whatos"
-    Components  = "aks; istio, ${each.key}"
+    Components  = "aks; istio, ${var.location}"
     DeployedOn  = timestamp()
     Deployer    = data.azurerm_client_config.current.object_id
   }

@@ -1,24 +1,22 @@
 resource "azurerm_virtual_network" "this" {
-  for_each            = local.locations
-  name                = "${local.resource_name}-network-${each.key}"
-  address_space       = ["10.${25+index(local.locations_list,each.key)}.0.0/16"]
-  location            = azurerm_resource_group.this[each.key].location
-  resource_group_name = azurerm_resource_group.this[each.key].name
+
+  name                = "${local.resource_name}-network"
+  address_space       = [ local.vnet_cidr ]
+  location            = azurerm_resource_group.this.location
+  resource_group_name = azurerm_resource_group.this.name
 }
 
 resource "azurerm_subnet" "this" {
-  for_each            = local.locations
   name                 = "servers"
-  resource_group_name  = azurerm_resource_group.this[each.key].name
-  virtual_network_name = azurerm_virtual_network.this[each.key].name
-  address_prefixes     = ["10.${25+index(local.locations_list,each.key)}.2.0/24"]
+  resource_group_name  = azurerm_resource_group.this.name
+  virtual_network_name = azurerm_virtual_network.this.name
+  address_prefixes     = [local.subnet_cidir]
 }
 
 resource "azurerm_network_security_group" "this" {
-  for_each            = local.locations
   name                = "${local.resource_name}-nsg"
-  location            = azurerm_resource_group.this[each.key].location
-  resource_group_name = azurerm_resource_group.this[each.key].name
+  location            = azurerm_resource_group.this.location
+  resource_group_name = azurerm_resource_group.this.name
 
   security_rule {
     name                       = "port_443"
@@ -34,16 +32,6 @@ resource "azurerm_network_security_group" "this" {
 }
 
 resource "azurerm_subnet_network_security_group_association" "this" {
-  for_each                  = local.locations
-  subnet_id                 = azurerm_subnet.this[each.key].id
-  network_security_group_id = azurerm_network_security_group.this[each.key].id
-}
-
-resource "azurerm_virtual_network_peering" "this" {
-  count                     = length(local.locations_list)
-  name                      = "300b7e8f28b5"
-  resource_group_name       = azurerm_resource_group.this[element(local.locations_list, count.index)].name
-  virtual_network_name      = azurerm_virtual_network.this[element(local.locations_list, count.index)].name
-  remote_virtual_network_id = azurerm_virtual_network.this[element(local.locations_list, 1 - count.index)].id
-  allow_virtual_network_access = true
+  subnet_id                 = azurerm_subnet.this.id
+  network_security_group_id = azurerm_network_security_group.this.id
 }

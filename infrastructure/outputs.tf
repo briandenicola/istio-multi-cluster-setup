@@ -1,20 +1,19 @@
-output "CENTRAL_CLUSTER_RG" {
-    value = azurerm_kubernetes_cluster.this["centralus"].resource_group_name
+output "CLUSTER_RG" {
+    value = azurerm_kubernetes_cluster.this.resource_group_name
     sensitive = false
 }
 
-output "CENTRAL_CLUSTER_NAME" {
-    value = azurerm_kubernetes_cluster.this["centralus"].name
+output "CLUSTER_NAME" {
+    value = azurerm_kubernetes_cluster.this.name
     sensitive = false
 }
 
-output "SOUTH_CENTRAL_CLUSTER_RG" {
-    value = azurerm_kubernetes_cluster.this["southcentralus"].resource_group_name
+output "VNET_NAME" {
+    value = azurerm_virtual_network.this.name
     sensitive = false
 }
 
-output "SOUTH_CENTRAL_CLUSTER_NAME" {
-    value = azurerm_kubernetes_cluster.this["southcentralus"].name
+output "VNET_RESOURCE_ID" {
+    value = azurerm_virtual_network.this.id
     sensitive = false
 }
-
