@@ -48,10 +48,10 @@ This repo is to automate the setup of a Multi-primary Istio Mesh of two AKS clus
 
   az aks get-credentials -g ${CENTRAL_CLUSTER_RG} -n ${CENTRAL_CLUSTER_NAME} --overwrite-existing
   kubelogin convert-kubeconfig -l azurecli
-  kubectl apply -f ./cluster-manifests/base/istio-namespace.yaml
-  kubectl apply -f ./cluster-manifests/base/certificate-issuer.yaml
-  kubectl apply -f ./cluster-manifests/base/certificate.yaml
-  helm upgrade -i -n cert-manager cert-manager-istio-csr jetstack/cert-manager-istio-csr \
+  kubectl --context="${CENTRAL_CLUSTER_NAME}" apply -f ./cluster-manifests/base/istio-namespace.yaml
+  kubectl --context="${CENTRAL_CLUSTER_NAME}" apply -f ./cluster-manifests/base/certificate-issuer.yaml
+  kubectl --context="${CENTRAL_CLUSTER_NAME}" apply -f ./cluster-manifests/base/certificate.yaml
+  helm --kube-context="${CENTRAL_CLUSTER_NAME}" upgrade -i -n cert-manager cert-manager-istio-csr jetstack/cert-manager-istio-csr \
     --set "app.tls.rootCAFile=/var/run/secrets/istio-csr/ca.pem" \
     --set "app.server.clusterID=${CENTRAL_CLUSTER_NAME}" \
     --set "app.certmanager.issuer.name=vault-issuer" \
@@ -74,10 +74,10 @@ This repo is to automate the setup of a Multi-primary Istio Mesh of two AKS clus
 
   az aks get-credentials -g ${SOUTH_CENTRAL_CLUSTER_RG} -n ${SOUTH_CENTRAL_CLUSTER_NAME} --overwrite-existing
   kubelogin convert-kubeconfig -l azurecli
-  kubectl apply -f ./cluster-manifests/base/istio-namespace.yaml
-  kubectl apply -f ./cluster-manifests/base/certificate-issuer.yaml
-  kubectl apply -f ./cluster-manifests/base/certificate.yaml
-  helm upgrade -i -n cert-manager cert-manager-istio-csr jetstack/cert-manager-istio-csr \
+  kubectl --context="${SOUTH_CENTRAL_CLUSTER_NAME}" apply -f ./cluster-manifests/base/istio-namespace.yaml
+  kubectl --context="${SOUTH_CENTRAL_CLUSTER_NAME}" apply -f ./cluster-manifests/base/certificate-issuer.yaml
+  kubectl --context="${SOUTH_CENTRAL_CLUSTER_NAME}" apply -f ./cluster-manifests/base/certificate.yaml
+  helm --kube-ccontext="${SOUTH_CENTRAL_CLUSTER_NAME}"  upgrade -i -n cert-manager cert-manager-istio-csr jetstack/cert-manager-istio-csr \
     --set "app.tls.rootCAFile=/var/run/secrets/istio-csr/ca.pem" \
     --set "app.server.clusterID=${CENTRAL_CLUSTER_NAME}" \
     --set "app.certmanager.issuer.name=vault-issuer" \
@@ -88,25 +88,16 @@ This repo is to automate the setup of a Multi-primary Istio Mesh of two AKS clus
     --set "volumes[0].secret.secretName=istio-ca"
 ```
 
-
 ## Install Istio - Central
 ```bash
-  source ./scripts/setup-env.sh
-
-  az aks get-credentials -g ${CENTRAL_CLUSTER_RG} -n ${CENTRAL_CLUSTER_NAME} --overwrite-existing
-  kubelogin convert-kubeconfig -l azurecli
-  watch kubectl apply -f ./cluster-manifests/base/istio-operator.yaml
-  kubectl apply -k ./cluster-mantifests/central
+  watch kubectl --context="${CENTRAL_CLUSTER_NAME}" apply -f ./cluster-manifests/base/istio-operator.yaml
+  kubectl --context="${CENTRAL_CLUSTER_NAME}" apply -k ./cluster-mantifests/central
 ```
 
 ## Install Istio - South Central
 ```bash
-  source ./scripts/setup-env.sh
-
-  az aks get-credentials -g ${SOUTH_CENTRAL_CLUSTER_RG} -n ${SOUTH_CENTRAL_CLUSTER_NAME} --overwrite-existing
-  kubelogin convert-kubeconfig -l azurecli
-  watch kubectl apply -f ./cluster-manifests/base/istio-operator.yaml
-  kubectl apply -k ./cluster-mantifests/southcentral
+  watch kubectl --context="${SOUTH_CENTRAL_CLUSTER_NAME}" apply -f ./cluster-manifests/base/istio-operator.yaml
+  kubectl --context="${SOUTH_CENTRAL_CLUSTER_NAME}" apply -k ./cluster-mantifests/southcentral
 ```
 
 ## Setup Istio Remote Secrets
@@ -119,9 +110,17 @@ This repo is to automate the setup of a Multi-primary Istio Mesh of two AKS clus
     | kubectl --context="${CENTRAL_CLUSTER_NAME}" apply -f - 
 ```
 
+## Deploy App 
+```bash
+  kubectl --context="${CENTRAL_CLUSTER_NAME}" apply -f ./apps/os-checker/v1/os-checker.yaml
+  kubectl --context="${SOUTH_CENTRAL_CLUSTER_NAME}" apply -f ./apps/os-checker/v2/os-checker.yaml
+```
+
 # Validate
 ```bash
-  echo TBD
+  kubectl run --restart=Never --image=bjd145/utils:3.10 utils
+  kubectl exec utils -- curl -sS whatos-api.whatos.svc:8081/api/os
+  kubectl exec utils -- curl -sS whatos-api.whatos.svc:8081/api/os
 ```
 
 # References:
