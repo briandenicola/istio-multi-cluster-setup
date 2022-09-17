@@ -2,16 +2,8 @@
 
 while (( "$#" )); do
   case "$1" in
-    -r|--region)
-      regions+=($2)
-      shift 2
-      ;;
     -n|--name)
       peer_name=$2
-      shift 2
-      ;;
-    --domain)
-      domainName=$2
       shift 2
       ;;
     -h|--help)
