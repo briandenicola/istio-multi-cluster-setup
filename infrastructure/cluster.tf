@@ -12,7 +12,11 @@ resource "azurerm_kubernetes_cluster" "this" {
   dns_prefix                        = "${local.aks_name}"
   sku_tier                          = "Free"
   azure_policy_enabled              = true
+  local_account_disabled            = true 
+  automatic_channel_upgrade         = "patch"
+  oidc_issuer_enabled               = true 
   api_server_authorized_ip_ranges   = ["${chomp(data.http.myip.body)}/32"]
+  role_based_access_control_enabled = true
 
   azure_active_directory_role_based_access_control {
     managed                = true
@@ -39,9 +43,10 @@ resource "azurerm_kubernetes_cluster" "this" {
     os_disk_size_gb     = 30
     vnet_subnet_id      = azurerm_subnet.this.id
     type                = "VirtualMachineScaleSets"
+    os_sku              = "CBLMariner"
     enable_auto_scaling = true
     min_count           = 1
-    max_count           = 2
+    max_count           = 5
     max_pods            = 40
   }
 
