@@ -15,7 +15,7 @@ resource "azurerm_kubernetes_cluster" "this" {
   local_account_disabled            = true 
   automatic_channel_upgrade         = "patch"
   oidc_issuer_enabled               = true 
-  api_server_authorized_ip_ranges   = ["${chomp(data.http.myip.body)}/32"]
+  api_server_authorized_ip_ranges   = ["${chomp(data.http.myip.response_body)}/32"]
   role_based_access_control_enabled = true
 
   azure_active_directory_role_based_access_control {
